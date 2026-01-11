@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Senet Game (Default)",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "senet",
+            "args": "",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "java",
+            "name": "Senet Game (Verbose)",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "senet",
+            "args": "--depth 3 --verbose",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "java",
+            "name": "Senet Game (AI First)",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "senet",
+            "args": "--depth 4 --ai-first --verbose",
+            "console": "integratedTerminal"
+        }
+    ]
+}

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Mind of a Senet AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c5b76;
+            --secondary-color: #d1b06b;
+            --background-color: #fdfcf8;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --header-font: 'Montserrat', sans-serif;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), #4a87a9);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            border-bottom: 8px solid var(--secondary-color);
+        }
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 1.5px;
+        }
+        .header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 1rem auto 0;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .section {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+            border-left: 5px solid var(--primary-color);
+        }
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+        .concept-card {
+            text-align: center;
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            position: sticky;
+            top: 20px;
+        }
+        .concept-card.max { border-top: 4px solid #28a745; }
+        .concept-card.min { border-top: 4px solid #dc3545; }
+        .concept-card.chance { border-top: 4px solid #ffc107; }
+        .concept-card h3 { margin-top: 0; color: var(--primary-color); }
+        .concept-card svg { max-width: 80px; }
+
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.85em;
+            margin: 0;
+        }
+        pre .comment { color: #8d9d7c; } /* Green for comments */
+        pre .keyword { color: #cc7832; } /* Orange for keywords */
+        pre .type { color: #6897bb; } /* Blue for types */
+        pre .number { color: #6897bb; }
+        pre .method { color: #ffc66d; } /* Yellow for method names */
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .concept-card {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>The Mind of a Senet AI</h1>
+        <p>A visual journey into how a computer thinks, plans, and plays the ancient game of Senet, connecting concepts to code.</p>
+    </header>
+
+    <main class="container">
+        <section class="section">
+            <h2>The Goal: From Concept to Code</h2>
+            <p>This report bridges the gap between the high-level concepts of the Senet AI and the actual Java code in <code>Expectiminimax.java</code>. Below, each "role" of the AI's mind is presented side-by-side with the code that brings it to life.</p>
+        </section>
+
+        <section class="section">
+            <h2>From Concepts to Code: The Three Roles</h2>
+            
+            <div class="grid-2">
+                <div class="concept-card max">
+                    <h3>The Maximizer (AI's Turn)</h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                    <p>When it's the AI's turn, it chooses the move that leads to the future with the <strong>highest score</strong>. This is the <code>maxNode</code>.</p>
+                </div>
+                <div class="code-view">
+                    <pre><code><span class="comment">/**
+ * MAX node - AI player's turn (maximize)
+ */</span>
+<span class="keyword">private double</span> <span class="method">maxNode</span>(<span class="type">GameState</span> state, <span class="type">int</span> depth,
+                      <span class="type">double</span> alpha, <span class="type">double</span> beta, <span class="type">int</span> roll) {
+
+    <span class="comment">// Find all possible moves for the given roll.</span>
+    <span class="type">List</span>&lt;<span class="type">Move</span>&gt; legalMoves = <span class="type">GameRules</span>.<span class="method">getLegalMoves</span>(state, roll);
+
+    <span class="comment">// If no moves, skip turn by calling the next node.</span>
+    <span class="keyword">if</span> (legalMoves.<span class="method">isEmpty</span>()) {
+        <span class="comment">// ... skip turn logic ...</span>
+    }
+
+    <span class="type">double</span> maxValue = <span class="type">Double</span>.NEGATIVE_INFINITY;
+
+    <span class="comment">// Loop through every legal move.</span>
+    <span class="keyword">for</span> (<span class="type">Move</span> move : legalMoves) {
+        <span class="comment">// 1. Apply the move to get a new hypothetical state.</span>
+        <span class="type">GameState</span> nextState = <span class="type">GameRules</span>.<span class="method">applyMove</span>(state, move);
+        nextState.<span class="method">switchPlayer</span>();
+
+        <span class="comment">// 2. After I move, it's the opponent's roll.
+        //    So, we dive into a CHANCE node.</span>
+        <span class="type">double</span> value = <span class="method">chanceNode</span>(nextState, depth - 1, alpha, beta, <span class="keyword">false</span>);
+
+        <span class="comment">// 3. Keep track of the move that gives the best score.</span>
+        maxValue = <span class="type">Math</span>.<span class="method">max</span>(maxValue, value);
+        alpha = <span class="type">Math</span>.<span class="method">max</span>(alpha, value);
+
+        <span class="comment">// 4. Pruning: If we've found a move that's already
+        //    better than the opponent's best option, stop searching.</span>
+        <span class="keyword">if</span> (beta <= alpha) {
+            <span class="keyword">break</span>;
+        }
+    }
+
+    <span class="keyword">return</span> maxValue;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="grid-2">
+                <div class="concept-card min">
+                    <h3>The Minimizer (Opponent's Turn)</h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                    <p>The AI assumes the opponent is also smart and will pick the move that's worst for the AI (the one with the <strong>lowest score</strong>). This is the <code>minNode</code>.</p>
+                </div>
+                <div class="code-view">
+                    <pre><code><span class="comment">/**
+ * MIN node - Opponent's turn (minimize)
+ */</span>
+<span class="keyword">private double</span> <span class="method">minNode</span>(<span class="type">GameState</span> state, <span class="type">int</span> depth,
+                      <span class="type">double</span> alpha, <span class="type">double</span> beta, <span class="type">int</span> roll) {
+
+    <span class="type">List</span>&lt;<span class="type">Move</span>&gt; legalMoves = <span class="type">GameRules</span>.<span class="method">getLegalMoves</span>(state, roll);
+
+    <span class="type">double</span> minValue = <span class="type">Double</span>.POSITIVE_INFINITY;
+
+    <span class="comment">// Loop through the opponent's possible moves.</span>
+    <span class="keyword">for</span> (<span class="type">Move</span> move : legalMoves) {
+        <span class="comment">// 1. Simulate the opponent's move.</span>
+        <span class="type">GameState</span> nextState = <span class="type">GameRules</span>.<span class="method">applyMove</span>(state, move);
+        nextState.<span class="method">switchPlayer</span>();
+
+        <span class="comment">// 2. After the opponent moves, it's the AI's roll.
+        //    So, we dive into a CHANCE node again.</span>
+        <span class="type">double</span> value = <span class="method">chanceNode</span>(nextState, depth - 1, alpha, beta, <span class="keyword">true</span>);
+
+        <span class="comment">// 3. Find the move that's WORST for the AI.</span>
+        minValue = <span class="type">Math</span>.<span class="method">min</span>(minValue, value);
+        beta = <span class="type">Math</span>.<span class="method">min</span>(beta, value);
+
+        <span class="comment">// 4. Pruning: If the opponent has found a move
+        //    that's worse for me than my current best option,
+        //    I know to avoid this whole branch.</span>
+        <span class="keyword">if</span> (beta <= alpha) {
+            <span class="keyword">break</span>;
+        }
+    }
+
+    <span class="keyword">return</span> minValue;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+             <div class="grid-2">
+                <div class="concept-card chance">
+                    <h3>The Realist (The Random Roll)</h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#ffc107" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg>
+                    <p>To handle random stick throws, the AI calculates a weighted <strong>average score</strong> based on the probability of all possible rolls. This is the <code>chanceNode</code>.</p>
+                </div>
+                <div class="code-view">
+                    <pre><code><span class="comment">/**
+ * CHANCE node - calculate expected value over all dice rolls
+ */</span>
+<span class="keyword">private double</span> <span class="method">chanceNode</span>(<span class="type">GameState</span> state, <span class="type">int</span> depth,
+                             <span class="type">double</span> alpha, <span class="type">double</span> beta, <span class="keyword">boolean</span> isMaxPlayer) {
+
+    <span class="comment">// If we're at max depth, just evaluate the board.
+    // This is where the Heuristic "gut feeling" is used.</span>
+    <span class="keyword">if</span> (depth == <span class="number">0</span> || <span class="type">GameRules</span>.<span class="method">isTerminalState</span>(state)) {
+        <span class="keyword">return</span> <span class="type">Heuristic</span>.<span class="method">evaluate</span>(state, aiPlayer);
+    }
+
+    <span class="type">double</span> expectedValue = <span class="number">0.0</span>;
+    <span class="type">int</span>[] possibleRolls = <span class="type">SticksManager</span>.<span class="method">getAllPossibleRolls</span>();
+
+    <span class="comment">// Loop through every possible roll (1, 2, 3, 4, 5).</span>
+    <span class="keyword">for</span> (<span class="type">int</span> roll : possibleRolls) {
+        <span class="comment">// 1. Get the probability of this specific roll.</span>
+        <span class="type">double</span> probability = <span class="type">SticksManager</span>.<span class="method">getProbability</span>(roll);
+        
+        <span class="comment">// 2. Find the value of the next state (is it AI's turn or opponent's?).</span>
+        <span class="type">double</span> value = isMaxPlayer ? <span class="method">maxNode</span>(...) : <span class="method">minNode</span>(...);
+
+        <span class="comment">// 3. Add the value, weighted by its probability, to the total.</span>
+        expectedValue += probability * value;
+    }
+
+    <span class="keyword">return</span> expectedValue;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>The Starting Point: <code>getBestMove</code></h2>
+            <p>This entire recursive process is kicked off by the <code>getBestMove</code> function. It looks at the AI's current (known) roll, simulates each possible move, and kicks off the chain of <code>chanceNode</code> -> <code>minNode</code> -> <code>chanceNode</code> -> ... calls to find the move that leads to the best-rated future.</p>
+        </section>
+
+    </main>
+
+</body>
+</html>
