@@ -109,7 +109,7 @@ public class SticksManager {
         public String toString() {
             StringBuilder sb = new StringBuilder("Sticks: [");
             for (int i = 0; i < sticks.length; i++) {
-                sb.append(sticks[i] ? "■" : "□");
+                sb.append(sticks[i] ? "□" :  "■");
                 if (i < sticks.length - 1) sb.append(" ");
             }
             sb.append("] → Roll: ").append(value);

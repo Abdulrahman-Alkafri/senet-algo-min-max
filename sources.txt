@@ -1,9 +1,9 @@
 C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\Main.java
-C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\boot\Expectiminimax.java
-C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\boot\Heuristic.java
-C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\boot\NodeType.java
-C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\boot\SearchResult.java
-C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\boot\SearchStats.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\computer\Expectiminimax.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\computer\GameResult.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\computer\GameStats.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\computer\Heuristic.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\computer\TurnType.java
 C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\game\BoardDisplay.java
 C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\game\GameController.java
 C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\game\GameRules.java

@@ -1,4 +1,4 @@
-package boot;
+package computer;
 
 import models.Player;
 import models.GameState;
@@ -9,13 +9,13 @@ import java.util.List;
 
 public class Expectiminimax {
 
-    private final Player bootPlayer;
-    private final SearchStats stats;
+    private final Player computerPlayer;
+    private final GameStats stats;
     private final boolean verbose;
 
-    public Expectiminimax(Player bootPlayer, boolean verbose) {
-        this.bootPlayer = bootPlayer;
-        this.stats = new SearchStats();
+    public Expectiminimax(Player computerPlayer, boolean verbose) {
+        this.computerPlayer = computerPlayer;
+        this.stats = new GameStats();
         this.verbose = verbose;
     }
 
@@ -78,12 +78,12 @@ public class Expectiminimax {
      */
     private double chanceNode(GameState state, int depth,
                              double alpha, double beta, boolean isMaxPlayer) {
-        stats.incrementNode(NodeType.CHANCE);
+        stats.incrementNode(TurnType.CHANCE);
         stats.updateMaxDepth(depth);
 
         // Terminal check
         if (depth == 0 || GameRules.isTerminalState(state)) {
-            return Heuristic.evaluate(state, bootPlayer);
+            return Heuristic.evaluate(state, computerPlayer);
         }
 
         // Calculate expected value over all possible rolls
@@ -107,11 +107,11 @@ public class Expectiminimax {
     }
 
     /**
-     * MAX node - AI player's turn (maximize)
+     * MAX node - Computer player's turn (maximize)
      */
     private double maxNode(GameState state, int depth,
                           double alpha, double beta, int roll) {
-        stats.incrementNode(NodeType.MAX);
+        stats.incrementNode(TurnType.MAX);
 
         List<Move> legalMoves = GameRules.getLegalMoves(state, roll);
 
@@ -129,7 +129,7 @@ public class Expectiminimax {
 
             // Terminal state check
             if (GameRules.isTerminalState(nextState)) {
-                return Heuristic.evaluate(nextState, bootPlayer);
+                return Heuristic.evaluate(nextState, computerPlayer);
             }
 
             nextState.switchPlayer();
@@ -152,7 +152,7 @@ public class Expectiminimax {
      */
     private double minNode(GameState state, int depth,
                           double alpha, double beta, int roll) {
-        stats.incrementNode(NodeType.MIN);
+        stats.incrementNode(TurnType.MIN);
 
         List<Move> legalMoves = GameRules.getLegalMoves(state, roll);
 
@@ -170,7 +170,7 @@ public class Expectiminimax {
 
             // Terminal state check
             if (GameRules.isTerminalState(nextState)) {
-                return Heuristic.evaluate(nextState, bootPlayer);
+                return Heuristic.evaluate(nextState, computerPlayer);
             }
 
             nextState.switchPlayer();
@@ -188,7 +188,7 @@ public class Expectiminimax {
         return minValue;
     }
 
-    public SearchStats getStats() {
+    public GameStats getStats() {
         return stats;
     }
 }

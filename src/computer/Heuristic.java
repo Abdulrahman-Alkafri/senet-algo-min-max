@@ -1,4 +1,4 @@
-package boot;
+package computer;
 
 import models.*;
 import game.GameRules;
@@ -13,13 +13,13 @@ public class Heuristic {
     private static final double OPPONENT_BLOCKING_WEIGHT = 15.0;
 
     /**
-     * Evaluate game state from Boot player's perspective
-     * Higher value = better for Boot
+     * Evaluate game state from Computer player's perspective
+     * Higher value = better for Computer
      */
-    public static double evaluate(GameState state, Player bootPlayer) {
+    public static double evaluate(GameState state, Player computerPlayer) {
         // Terminal state check
         if (GameRules.isTerminalState(state)) {
-            if (state.getWinner() == bootPlayer) {
+            if (state.getWinner() == computerPlayer) {
                 return Double.POSITIVE_INFINITY;
             } else {
                 return Double.NEGATIVE_INFINITY;
@@ -29,21 +29,21 @@ public class Heuristic {
         double score = 0.0;
 
         // 1. Pieces exited (most important)
-        score += (state.getPiecesExited(bootPlayer) -
-                  state.getPiecesExited(bootPlayer.opponent()))
+        score += (state.getPiecesExited(computerPlayer) -
+                  state.getPiecesExited(computerPlayer.opponent()))
                   * PIECE_EXITED_WEIGHT;
 
         // 2. Piece advancement
-        score += calculateAdvancementScore(state, bootPlayer);
+        score += calculateAdvancementScore(state, computerPlayer);
 
         // 3. Piece safety
-        score += calculateSafetyScore(state, bootPlayer);
+        score += calculateSafetyScore(state, computerPlayer);
 
         // 4. Special square control
-        score += calculateSpecialSquareScore(state, bootPlayer);
+        score += calculateSpecialSquareScore(state, computerPlayer);
 
         // 5. Opponent blocking
-        score += calculateBlockingScore(state, bootPlayer);
+        score += calculateBlockingScore(state, computerPlayer);
 
         return score;
     }

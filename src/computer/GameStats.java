@@ -1,6 +1,6 @@
-package boot;
+package computer;
 
-public class SearchStats {
+public class GameStats {
     private int nodesExplored;
     private int maxNodes;
     private int minNodes;
@@ -9,7 +9,7 @@ public class SearchStats {
     private long startTime;
     private long endTime;
 
-    public SearchStats() {
+    public GameStats() {
         reset();
     }
 
@@ -22,7 +22,7 @@ public class SearchStats {
         startTime = System.currentTimeMillis();
     }
 
-    public void incrementNode(NodeType type) {
+    public void incrementNode(TurnType type) {
         nodesExplored++;
         switch (type) {
             case MAX: maxNodes++; break;

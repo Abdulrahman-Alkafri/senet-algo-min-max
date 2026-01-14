@@ -1,6 +1,6 @@
-package boot;
+package computer;
 
-public enum NodeType {
+public enum TurnType {
     MAX,      // Computer's turn - maximize
     MIN,      // Opponent's turn - minimize
     CHANCE    // Dice roll - expected value

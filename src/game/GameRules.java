@@ -17,6 +17,7 @@ public class GameRules {
         int[] piecePositions = board.getPiecePositions(currentPlayer);
 
         for (int fromPos : piecePositions) {
+
             int toPos = fromPos + roll;
 
             // Special handling for last 5 squares

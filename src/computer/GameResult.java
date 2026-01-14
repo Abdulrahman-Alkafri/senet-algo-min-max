@@ -1,13 +1,13 @@
-package boot;
+package computer;
 
 import models.Move;
 
-public class SearchResult {
+public class GameResult {
     private final double value;
     private final Move bestMove;
-    private final NodeType nodeType;
+    private final TurnType nodeType;
 
-    public SearchResult(double value, Move bestMove, NodeType nodeType) {
+    public GameResult(double value, Move bestMove, TurnType nodeType) {
         this.value = value;
         this.bestMove = bestMove;
         this.nodeType = nodeType;
@@ -21,13 +21,13 @@ public class SearchResult {
         return bestMove;
     }
 
-    public NodeType getNodeType() {
+    public TurnType getNodeType() {
         return nodeType;
     }
 
     @Override
     public String toString() {
-        return String.format("SearchResult[value=%.3f, move=%s, type=%s]",
+        return String.format("GameResult[value=%.3f, move=%s, type=%s]",
             value, bestMove, nodeType);
     }
 }
