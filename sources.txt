@@ -1,0 +1,16 @@
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\Main.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\boot\Expectiminimax.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\boot\Heuristic.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\boot\NodeType.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\boot\SearchResult.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\boot\SearchStats.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\game\BoardDisplay.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\game\GameController.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\game\GameRules.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\game\SticksManager.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\models\Board.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\models\GameState.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\models\Move.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\models\Player.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\models\Square.java
+C:\Users\mouha\Downloads\AlgProject1\senet-algo-min-max\src\utils\Constants.java

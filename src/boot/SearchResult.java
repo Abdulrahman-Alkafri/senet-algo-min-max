@@ -1,4 +1,4 @@
-package ai;
+package boot;
 
 import models.Move;
 

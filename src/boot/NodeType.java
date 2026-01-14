@@ -1,4 +1,4 @@
-package ai;
+package boot;
 
 public enum NodeType {
     MAX,      // Computer's turn - maximize

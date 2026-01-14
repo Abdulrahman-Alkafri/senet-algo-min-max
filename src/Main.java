@@ -8,7 +8,7 @@ public class Main {
         boolean verbose = false;
         boolean aiFirst = false;
 
-        // Parse command line arguments
+        // Parse command line argumentsi
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "--depth":
@@ -48,13 +48,13 @@ public class Main {
 
     private static void printHelp() {
         System.out.println("╔════════════════════════════════════════════════════════╗");
-        System.out.println("║          Senet Game - AI Search Project               ║");
+        System.out.println("║          Senet Game - Boot Search Project               ║");
         System.out.println("╚════════════════════════════════════════════════════════╝");
         System.out.println("\nUsage: java Main [options]");
         System.out.println("\nOptions:");
         System.out.println("  -d, --depth <n>      Set search depth (default: 3)");
         System.out.println("  -v, --verbose        Show detailed algorithm output");
-        System.out.println("  -a, --ai-first       AI plays first (default: human first)");
+        System.out.println("  -a, --ai-first       Boot plays first (default: human first)");
         System.out.println("  -h, --help           Show this help message");
         System.out.println("\nExamples:");
         System.out.println("  java Main --depth 4 --verbose");

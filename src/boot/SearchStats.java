@@ -1,4 +1,4 @@
-package ai;
+package boot;
 
 public class SearchStats {
     private int nodesExplored;

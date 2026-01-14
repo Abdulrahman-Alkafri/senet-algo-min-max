@@ -1,10 +1,10 @@
-# Senet Game - AI Search Project
+# Senet Game - Boot Search Project
 
-This is an implementation of the ancient Egyptian game **Senet** using the **Expectiminimax algorithm** with Alpha-Beta pruning for intelligent game AI.
+This is an implementation of the ancient Egyptian game **Senet** using the **Expectiminimax algorithm** with Alpha-Beta pruning for intelligent game boot.
 
 ## Project Overview
 
-Senet is a non-deterministic two-player board game where players move pieces based on dice rolls (4 sticks). The AI uses the Expectiminimax algorithm to handle the probabilistic nature of the game.
+Senet is a non-deterministic two-player board game where players move pieces based on dice rolls (4 sticks). The Boot uses the Expectiminimax algorithm to handle the probabilistic nature of the game.
 
 ## Project Structure
 
@@ -24,12 +24,12 @@ senet/
 │   │   ├── BoardDisplay.java     # Board visualization
 │   │   └── GameController.java   # Main game loop
 │   │
-│   ├── ai/                  # AI implementation
+│   ├── boot/                # Boot implementation
 │   │   ├── NodeType.java         # MAX, MIN, CHANCE nodes
 │   │   ├── SearchResult.java     # Search result wrapper
 │   │   ├── SearchStats.java      # Performance statistics
 │   │   ├── Heuristic.java        # State evaluation function
-│   │   └── Expectiminimax.java   # Main AI algorithm
+│   │   └── Expectiminimax.java   # Main Boot algorithm
 │   │
 │   ├── utils/
 │   │   └── Constants.java        # Game constants
@@ -66,7 +66,7 @@ java -cp bin Main --help
 |--------|-------------|---------|
 | `-d, --depth <n>` | Search depth (1-10) | 3 |
 | `-v, --verbose` | Show detailed algorithm output | false |
-| `-a, --ai-first` | AI plays first | false (human first) |
+| `-a, --ai-first` | Boot plays first | false (human first) |
 | `-h, --help` | Show help message | - |
 
 ### Examples
@@ -75,7 +75,7 @@ java -cp bin Main --help
 # Play with depth 4 and verbose output
 java -cp bin Main --depth 4 --verbose
 
-# AI plays first with depth 5
+# Boot plays first with depth 5
 java -cp bin Main -d 5 -a
 
 # Full verbose mode

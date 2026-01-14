@@ -1,4 +1,4 @@
-package ai;
+package boot;
 
 import models.Player;
 import models.GameState;
@@ -9,12 +9,12 @@ import java.util.List;
 
 public class Expectiminimax {
 
-    private final Player aiPlayer;
+    private final Player bootPlayer;
     private final SearchStats stats;
     private final boolean verbose;
 
-    public Expectiminimax(Player aiPlayer, boolean verbose) {
-        this.aiPlayer = aiPlayer;
+    public Expectiminimax(Player bootPlayer, boolean verbose) {
+        this.bootPlayer = bootPlayer;
         this.stats = new SearchStats();
         this.verbose = verbose;
     }
@@ -83,7 +83,7 @@ public class Expectiminimax {
 
         // Terminal check
         if (depth == 0 || GameRules.isTerminalState(state)) {
-            return Heuristic.evaluate(state, aiPlayer);
+            return Heuristic.evaluate(state, bootPlayer);
         }
 
         // Calculate expected value over all possible rolls
@@ -129,7 +129,7 @@ public class Expectiminimax {
 
             // Terminal state check
             if (GameRules.isTerminalState(nextState)) {
-                return Heuristic.evaluate(nextState, aiPlayer);
+                return Heuristic.evaluate(nextState, bootPlayer);
             }
 
             nextState.switchPlayer();
@@ -170,7 +170,7 @@ public class Expectiminimax {
 
             // Terminal state check
             if (GameRules.isTerminalState(nextState)) {
-                return Heuristic.evaluate(nextState, aiPlayer);
+                return Heuristic.evaluate(nextState, bootPlayer);
             }
 
             nextState.switchPlayer();

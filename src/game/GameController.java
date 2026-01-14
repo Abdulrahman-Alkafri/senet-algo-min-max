@@ -3,7 +3,7 @@ package game;
 import models.Player;
 import models.GameState;
 import models.Move;
-import ai.Expectiminimax;
+import boot.Expectiminimax;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,7 +12,7 @@ public class GameController {
     private final int searchDepth;
     private final boolean verbose;
     private final Player humanPlayer;
-    private final Player aiPlayer;
+    private final Player bootPlayer;
     private final Scanner scanner;
 
     public GameController(int searchDepth, boolean verbose, boolean aiFirst) {
@@ -22,11 +22,11 @@ public class GameController {
         this.scanner = new Scanner(System.in);
 
         if (aiFirst) {
-            this.aiPlayer = Player.WHITE;
+            this.bootPlayer = Player.WHITE;
             this.humanPlayer = Player.BLACK;
         } else {
             this.humanPlayer = Player.WHITE;
-            this.aiPlayer = Player.BLACK;
+            this.bootPlayer = Player.BLACK;
         }
     }
 
@@ -35,7 +35,7 @@ public class GameController {
         System.out.println("║           WELCOME TO SENET - THE ANCIENT GAME          ║");
         System.out.println("╚════════════════════════════════════════════════════════╝");
         System.out.println("\nHuman: " + humanPlayer.getSymbol() +
-                          " | AI: " + aiPlayer.getSymbol());
+                          " | Boot: " + bootPlayer.getSymbol());
         System.out.println("Search Depth: " + searchDepth);
 
         while (!state.isGameOver()) {
@@ -49,7 +49,7 @@ public class GameController {
             if (state.getCurrentPlayer() == humanPlayer) {
                 humanTurn(roll);
             } else {
-                aiTurn(roll);
+                bootTurn(roll);
             }
         }
 
@@ -69,13 +69,23 @@ public class GameController {
 
         BoardDisplay.printLegalMoves(legalMoves);
 
-        System.out.print("\nSelect move (1-" + legalMoves.size() + "): ");
-        int choice = scanner.nextInt();
+        int choice = -1;
+        boolean validInput = false;
 
-        if (choice < 1 || choice > legalMoves.size()) {
-            System.out.println("Invalid choice. Turn skipped.");
-            state.switchPlayer();
-            return;
+        while (!validInput) {
+            System.out.print("\nSelect move (1-" + legalMoves.size() + "): ");
+            try {
+                choice = scanner.nextInt();
+
+                if (choice < 1 || choice > legalMoves.size()) {
+                    System.out.println("Invalid input, please re-enter a number from the upper list of moves");
+                } else {
+                    validInput = true;
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid input, please re-enter a number from the upper list of moves");
+                scanner.nextLine(); // Clear the invalid input
+            }
         }
 
         Move selectedMove = legalMoves.get(choice - 1);
@@ -85,14 +95,14 @@ public class GameController {
         state.switchPlayer();
     }
 
-    private void aiTurn(int roll) {
-        System.out.println("\n>>> AI is thinking...");
+    private void bootTurn(int roll) {
+        System.out.println("\n>>> Boot is thinking...");
 
-        Expectiminimax ai = new Expectiminimax(aiPlayer, verbose);
-        Move bestMove = ai.getBestMove(state, roll, searchDepth);
+        Expectiminimax boot = new Expectiminimax(bootPlayer, verbose);
+        Move bestMove = boot.getBestMove(state, roll, searchDepth);
 
         if (bestMove == null) {
-            System.out.println("\n>>> AI has no legal moves. Turn skipped.");
+            System.out.println("\n>>> Boot has no legal moves. Turn skipped.");
             state.switchPlayer();
             pause();
             return;
@@ -101,7 +111,7 @@ public class GameController {
         BoardDisplay.printMove(bestMove, roll);
 
         if (verbose) {
-            ai.getStats().printStats();
+            boot.getStats().printStats();
         }
 
         state = GameRules.applyMove(state, bestMove);
