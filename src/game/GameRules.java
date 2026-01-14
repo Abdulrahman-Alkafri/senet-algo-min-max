@@ -33,6 +33,14 @@ public class GameRules {
             if (toPos > 30) {
                 // Exit the board
                 legalMoves.add(new Move(fromPos, toPos, currentPlayer, false, true));
+            } else if (fromPos == 26 && toPos > 26) {
+                // From square 26, can move forward (exit or to empty square)
+                if (board.isEmpty(toPos)) {
+                    legalMoves.add(new Move(fromPos, toPos, currentPlayer, false, false));
+                } else if (board.getPieceAt(toPos) == currentPlayer.opponent()) {
+                    // Swap with opponent piece
+                    legalMoves.add(new Move(fromPos, toPos, currentPlayer, true, false));
+                }
             } else if (toPos == 26) {
                 // House of Happiness - must land exactly
                 legalMoves.add(new Move(fromPos, toPos, currentPlayer, false, false));
@@ -50,23 +58,36 @@ public class GameRules {
     }
 
     /**
-     * Check special square exit conditions (squares 28, 29, 30)
+     * Check special square exit conditions (squares 26, 28, 29, 30)
      */
     private static Move checkSpecialSquareExit(GameState state, int position, int roll) {
         Player player = state.getCurrentPlayer();
 
         switch (position) {
+            case 26: // House of Happiness - must land exactly, but can exit if roll takes beyond 30
+                int targetPos = position + roll;
+                if (targetPos > 30) {
+                    return new Move(position, targetPos, player, false, true); // Exit
+                } else {
+                    // If moving within bounds, it's a normal move handled elsewhere
+                    return null;
+                }
+
             case 28: // House of Three Truths - need exactly 3 to exit
                 if (roll == 3) {
                     return new Move(position, 31, player, false, true);
+                } else {
+                    // If roll is not 3, return to House of Rebirth (square 15)
+                    return new Move(position, 15, player, false, false);
                 }
-                break;
 
             case 29: // House of Re-Atoum - need exactly 2 to exit
                 if (roll == 2) {
                     return new Move(position, 31, player, false, true);
+                } else {
+                    // If roll is not 2, return to House of Rebirth (square 15)
+                    return new Move(position, 15, player, false, false);
                 }
-                break;
 
             case 30: // House of Horus - any roll exits
                 return new Move(position, 31, player, false, true);
@@ -126,7 +147,6 @@ public class GameRules {
                 board.setPieceAt(rebirthPos, player);
                 break;
 
-            // Squares 28, 29, 30 have exit conditions, not landing effects
             // Square 15 (Rebirth) is destination, not effect trigger
             // Square 26 (Happiness) requires exact landing, handled in getLegalMoves
         }
