@@ -1,8 +1,8 @@
 package models;
 
 public enum Player {
-    WHITE(0, "○"),
-    BLACK(1, "●");
+    WHITE(0, "●"),
+    BLACK(1, "○");
 
     private final int id;
     private final String symbol;

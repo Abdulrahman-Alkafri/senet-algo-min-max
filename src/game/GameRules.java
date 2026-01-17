@@ -29,8 +29,18 @@ public class GameRules {
                 }
             }
 
-            // Normal move or exit
-            if (toPos > 30) {
+            // Special handling for moves involving square 26 (House of Happiness)
+            if (toPos == 26) {
+                // House of Happiness - must land exactly
+                if(board.isEmpty(toPos))
+                legalMoves.add(new Move(fromPos, toPos, currentPlayer, false, false));
+                else
+                    legalMoves.add(new Move(fromPos, toPos, currentPlayer, true, false));
+            } else if (toPos > 26 && fromPos < 26) {
+                // Cannot move past square 26 from positions before 26
+                // Must land exactly on 26 first
+                // This move is illegal
+            } else if (toPos > 30) {
                 // Exit the board
                 legalMoves.add(new Move(fromPos, toPos, currentPlayer, false, true));
             } else if (fromPos == 26 && toPos > 26) {
@@ -41,9 +51,6 @@ public class GameRules {
                     // Swap with opponent piece
                     legalMoves.add(new Move(fromPos, toPos, currentPlayer, true, false));
                 }
-            } else if (toPos == 26) {
-                // House of Happiness - must land exactly
-                legalMoves.add(new Move(fromPos, toPos, currentPlayer, false, false));
             } else if (board.isEmpty(toPos)) {
                 // Move to empty square
                 legalMoves.add(new Move(fromPos, toPos, currentPlayer, false, false));
@@ -67,6 +74,7 @@ public class GameRules {
             case 26: // House of Happiness - must land exactly, but can exit if roll takes beyond 30
                 int targetPos = position + roll;
                 if (targetPos > 30) {
+
                     return new Move(position, targetPos, player, false, true); // Exit
                 } else {
                     // If moving within bounds, it's a normal move handled elsewhere
