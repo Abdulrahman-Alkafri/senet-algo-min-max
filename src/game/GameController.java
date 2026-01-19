@@ -63,6 +63,12 @@ public class GameController {
         if (legalMoves.isEmpty()) {
             System.out.println("\n>>> No legal moves available. Turn skipped.");
             state.switchPlayer();
+
+            // Check if game is over after switching player
+            if (state.isGameOver()) {
+                return; // Exit immediately if game is over
+            }
+
             pause();
             return;
         }
@@ -92,6 +98,12 @@ public class GameController {
         BoardDisplay.printMove(selectedMove, roll);
 
         state = GameRules.applyMove(state, selectedMove);
+
+        // Check if game is over after the move
+        if (state.isGameOver()) {
+            return; // Exit immediately without switching player
+        }
+
         state.switchPlayer();
     }
 
@@ -104,6 +116,12 @@ public class GameController {
         if (bestMove == null) {
             System.out.println("\n>>> Computer has no legal moves. Turn skipped.");
             state.switchPlayer();
+
+            // Check if game is over after switching player
+            if (state.isGameOver()) {
+                return; // Exit immediately if game is over
+            }
+
             pause();
             return;
         }
@@ -115,6 +133,12 @@ public class GameController {
         }
 
         state = GameRules.applyMove(state, bestMove);
+
+        // Check if game is over after the move
+        if (state.isGameOver()) {
+            return; // Exit immediately without switching player
+        }
+
         state.switchPlayer();
 
         pause();
