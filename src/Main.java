@@ -4,7 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
         // Default values
-        int depth = 3;
+        int depth = 6;
         boolean verbose = false;
         boolean aiFirst = false;
 
