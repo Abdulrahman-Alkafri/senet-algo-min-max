@@ -2,7 +2,7 @@ package models;
 
 public class Board {
     private static final int BOARD_SIZE = 30;
-    private Player[] squares; // null = empty, WHITE/BLACK = occupied
+    private Player[] squares;
 
     public Board() {
         squares = new Player[BOARD_SIZE + 1]; // index 0 unused, 1-30 used

@@ -5,12 +5,11 @@ import game.GameRules;
 
 public class Heuristic {
 
-    // Weights for evaluation
-    private static final double PIECE_EXITED_WEIGHT = 1000.0;
-    private static final double PIECE_ADVANCEMENT_WEIGHT = 10.0;
-    private static final double PIECE_SAFETY_WEIGHT = 5.0;
-    private static final double SPECIAL_SQUARE_WEIGHT = 20.0;
-    private static final double OPPONENT_BLOCKING_WEIGHT = 15.0;
+    // Weights for evaluation (simplified: 0.5 to 50 range)
+    private static final double PIECE_EXITED_WEIGHT = 50.0;
+    private static final double PIECE_ADVANCEMENT_WEIGHT = 5.0;
+    private static final double PIECE_SAFETY_WEIGHT = 2.0;
+    private static final double SPECIAL_SQUARE_WEIGHT = 10.0;
 
     /**
      * Evaluate game state from Computer player's perspective
@@ -42,9 +41,6 @@ public class Heuristic {
         // 4. Special square control
         score += calculateSpecialSquareScore(state, computerPlayer);
 
-        // 5. Opponent blocking
-        score += calculateBlockingScore(state, computerPlayer);
-
         return score;
     }
 
@@ -59,12 +55,12 @@ public class Heuristic {
         double playerSum = 0;
         for (int pos : positions) {
             // Pieces closer to exit are more valuable
-            playerSum += pos * pos; // Quadratic to emphasize advancement
+            playerSum += pos; // Linear advancement score
         }
 
         double opponentSum = 0;
         for (int pos : opponentPositions) {
-            opponentSum += pos * pos;
+            opponentSum += pos;
         }
 
         return (playerSum - opponentSum) * PIECE_ADVANCEMENT_WEIGHT;
@@ -81,11 +77,11 @@ public class Heuristic {
         for (int pos : positions) {
             // Pieces in last 5 squares are very safe (can't be swapped easily)
             if (pos >= 26) {
-                safetyScore += 3.0;
+                safetyScore += 2.0;
             }
             // Pieces past square 15 are safer
             else if (pos > 15) {
-                safetyScore += 1.0;
+                safetyScore += 0.5;
             }
         }
 
@@ -101,39 +97,17 @@ public class Heuristic {
 
         // Avoid water (27)
         if (board.getPieceAt(27) == player) {
-            score -= 50.0; // Penalty for being on water
+            score -= 5.0; // Penalty for being on water
         }
 
         // Reward for being close to exit (28, 29, 30)
-        if (board.getPieceAt(28) == player) score += 30.0;
-        if (board.getPieceAt(29) == player) score += 35.0;
-        if (board.getPieceAt(30) == player) score += 40.0;
+        if (board.getPieceAt(28) == player) score += 3.0;
+        if (board.getPieceAt(29) == player) score += 4.0;
+        if (board.getPieceAt(30) == player) score += 5.0;
 
         // Reward for passing happiness (26)
-        if (board.getPieceAt(26) == player) score += 25.0;
+        if (board.getPieceAt(26) == player) score += 4.0;
 
         return score * SPECIAL_SQUARE_WEIGHT;
     }
-
-    /**
-     * Score for blocking opponent
-     */
-    private static double calculateBlockingScore(GameState state, Player player) {
-        Board board = state.getBoard();
-        int[] opponentPositions = board.getPiecePositions(player.opponent());
-
-        double blockingScore = 0;
-
-        // Check if we're ahead of opponent pieces (blocking them)
-        int[] playerPositions = board.getPiecePositions(player);
-        for (int oppPos : opponentPositions) {
-            for (int myPos : playerPositions) {
-                if (myPos > oppPos && myPos - oppPos <= 5) {
-                    blockingScore += 1.0;
-                }
-            }
-        }
-
-        return blockingScore * OPPONENT_BLOCKING_WEIGHT;
-    }
-}
+   }

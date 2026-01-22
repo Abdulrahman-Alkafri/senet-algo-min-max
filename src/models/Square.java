@@ -27,14 +27,13 @@ public enum Square {
 
     public static Square getSquareType(int position) {
         for (Square sq : values()) {
-            if (sq.position == position) {
+            if (sq.position == position)
                 return sq;
-            }
         }
         return NORMAL;
     }
 
     public static boolean isSpecialSquare(int position) {
-        return position >= 15 && (position == 15 || position >= 26);
+        return (position == 15 || position >= 26);
     }
 }

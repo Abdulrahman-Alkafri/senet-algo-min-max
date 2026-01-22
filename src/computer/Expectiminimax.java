@@ -27,13 +27,9 @@ public class Expectiminimax {
 
         List<Move> legalMoves = GameRules.getLegalMoves(state, roll);
 
-        if (legalMoves.isEmpty()) {
-            return null;
-        }
+        if (legalMoves.isEmpty()) return null;
 
-        if (legalMoves.size() == 1) {
-            return legalMoves.get(0);
-        }
+        if (legalMoves.size() == 1) return legalMoves.get(0);
 
         Move bestMove = null;
         double bestValue = Double.NEGATIVE_INFINITY;

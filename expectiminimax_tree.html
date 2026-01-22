@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expectiminimax Tree - Senet Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .legend {
+            display: flex;
+            gap: 30px;
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border: 1px solid #ccc;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .tree-container {
+            background: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            overflow-x: auto;
+        }
+        .explanation {
+            background: white;
+            padding: 15px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+        }
+        .node-explain {
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 4px solid #333;
+        }
+        .max-explain { border-left-color: #2196F3; }
+        .min-explain { border-left-color: #f44336; }
+        .chance-explain { border-left-color: #4CAF50; }
+        code {
+            background: #eee;
+            padding: 2px 6px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Expectiminimax Algorithm - Senet Game Tree</h1>
+
+    <div class="explanation">
+        <h2>What is Expectiminimax?</h2>
+        <p>Expectiminimax is a variation of the Minimax algorithm used for games with <strong>chance elements</strong> (like dice rolls).</p>
+        <p>In Senet, players throw sticks to determine how many squares they can move. This randomness is handled by <strong>CHANCE nodes</strong>.</p>
+    </div>
+
+    <h2>Node Types</h2>
+    <div class="legend">
+        <div class="legend-item">
+            <svg width="40" height="40">
+                <rect x="5" y="5" width="30" height="30" fill="#2196F3" stroke="#000" stroke-width="2"/>
+            </svg>
+            <span><strong>MAX (Computer)</strong> - Tries to MAXIMIZE score</span>
+        </div>
+        <div class="legend-item">
+            <svg width="40" height="40">
+                <circle cx="20" cy="20" r="15" fill="none" stroke="#f44336" stroke-width="2"/>
+            </svg>
+            <span><strong>MIN (Human/User)</strong> - Tries to MINIMIZE computer's score</span>
+        </div>
+        <div class="legend-item">
+            <svg width="40" height="40">
+                <circle cx="20" cy="20" r="15" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            </svg>
+            <span><strong>CHANCE (Dice Roll)</strong> - Calculates expected value</span>
+        </div>
+    </div>
+
+    <h2>Example Tree (Depth 3)</h2>
+    <p><strong>Note:</strong> CHANCE nodes do NOT count as depth levels. Only MAX/MIN decision nodes count toward depth.</p>
+    <div class="tree-container">
+        <svg width="1100" height="750">
+            <!-- Depth 0: Root MAX node (Computer's turn with known roll) -->
+            <rect x="520" y="20" width="60" height="40" fill="#2196F3" stroke="#000" stroke-width="2"/>
+            <text x="550" y="45" text-anchor="middle" fill="white" font-size="12">MAX</text>
+            <text x="550" y="75" text-anchor="middle" font-size="10">Roll=3</text>
+
+            <!-- Lines from MAX to CHANCE nodes -->
+            <line x1="530" y1="60" x2="300" y2="110" stroke="#333" stroke-width="1"/>
+            <line x1="570" y1="60" x2="800" y2="110" stroke="#333" stroke-width="1"/>
+
+            <!-- Move labels -->
+            <text x="400" y="80" text-anchor="middle" font-size="10">Move A: pos 5→8</text>
+            <text x="700" y="80" text-anchor="middle" font-size="10">Move B: pos 10→13</text>
+
+            <!-- CHANCE nodes (after computer moves, before human rolls) - NOT a depth level -->
+            <circle cx="300" cy="130" r="22" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="300" y="135" text-anchor="middle" fill="white" font-size="10">CHANCE</text>
+
+            <circle cx="800" cy="130" r="22" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="800" y="135" text-anchor="middle" fill="white" font-size="10">CHANCE</text>
+
+            <!-- Lines from CHANCE to MIN nodes (showing different dice rolls) -->
+            <!-- Left CHANCE node -->
+            <line x1="280" y1="150" x2="100" y2="210" stroke="#333" stroke-width="1"/>
+            <line x1="300" y1="152" x2="300" y2="210" stroke="#333" stroke-width="1"/>
+            <line x1="320" y1="150" x2="500" y2="210" stroke="#333" stroke-width="1"/>
+
+            <!-- Roll probabilities for left CHANCE -->
+            <text x="170" y="175" text-anchor="middle" font-size="9">roll=1 (25%)</text>
+            <text x="300" y="185" text-anchor="middle" font-size="9">roll=2 (37.5%)</text>
+            <text x="430" y="175" text-anchor="middle" font-size="9">roll=4 (12.5%)</text>
+
+            <!-- Right CHANCE node -->
+            <line x1="780" y1="150" x2="650" y2="210" stroke="#333" stroke-width="1"/>
+            <line x1="800" y1="152" x2="800" y2="210" stroke="#333" stroke-width="1"/>
+            <line x1="820" y1="150" x2="950" y2="210" stroke="#333" stroke-width="1"/>
+
+            <!-- Roll probabilities for right CHANCE -->
+            <text x="700" y="175" text-anchor="middle" font-size="9">roll=1 (25%)</text>
+            <text x="800" y="185" text-anchor="middle" font-size="9">roll=2 (37.5%)</text>
+            <text x="900" y="175" text-anchor="middle" font-size="9">roll=3 (25%)</text>
+
+            <!-- Depth 1: MIN nodes (Human's turn with known roll) -->
+            <!-- Left branch -->
+            <circle cx="100" cy="235" r="25" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="100" y="240" text-anchor="middle" fill="#f44336" font-size="12">MIN</text>
+
+            <circle cx="300" cy="235" r="25" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="300" y="240" text-anchor="middle" fill="#f44336" font-size="12">MIN</text>
+
+            <circle cx="500" cy="235" r="25" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="500" y="240" text-anchor="middle" fill="#f44336" font-size="12">MIN</text>
+
+            <!-- Right branch -->
+            <circle cx="650" cy="235" r="25" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="650" y="240" text-anchor="middle" fill="#f44336" font-size="12">MIN</text>
+
+            <circle cx="800" cy="235" r="25" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="800" y="240" text-anchor="middle" fill="#f44336" font-size="12">MIN</text>
+
+            <circle cx="950" cy="235" r="25" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="950" y="240" text-anchor="middle" fill="#f44336" font-size="12">MIN</text>
+
+            <!-- Lines from MIN to CHANCE -->
+            <!-- From MIN at x=100 -->
+            <line x1="85" y1="260" x2="50" y2="310" stroke="#333" stroke-width="1"/>
+            <line x1="115" y1="260" x2="150" y2="310" stroke="#333" stroke-width="1"/>
+            <text x="55" y="290" font-size="8">move C</text>
+            <text x="145" y="290" font-size="8">move D</text>
+
+            <!-- From MIN at x=300 -->
+            <line x1="285" y1="260" x2="250" y2="310" stroke="#333" stroke-width="1"/>
+            <line x1="315" y1="260" x2="350" y2="310" stroke="#333" stroke-width="1"/>
+            <text x="255" y="290" font-size="8">move E</text>
+            <text x="345" y="290" font-size="8">move F</text>
+
+            <!-- From MIN at x=500 -->
+            <line x1="485" y1="260" x2="450" y2="310" stroke="#333" stroke-width="1"/>
+            <line x1="515" y1="260" x2="550" y2="310" stroke="#333" stroke-width="1"/>
+            <text x="455" y="290" font-size="8">move G</text>
+            <text x="545" y="290" font-size="8">move H</text>
+
+            <!-- From MIN at x=650 -->
+            <line x1="650" y1="260" x2="650" y2="310" stroke="#333" stroke-width="1"/>
+            <text x="665" y="290" font-size="8">move I</text>
+
+            <!-- From MIN at x=800 -->
+            <line x1="800" y1="260" x2="800" y2="310" stroke="#333" stroke-width="1"/>
+            <text x="815" y="290" font-size="8">move J</text>
+
+            <!-- From MIN at x=950 -->
+            <line x1="935" y1="260" x2="900" y2="310" stroke="#333" stroke-width="1"/>
+            <line x1="965" y1="260" x2="1000" y2="310" stroke="#333" stroke-width="1"/>
+            <text x="895" y="290" font-size="8">move K</text>
+            <text x="1005" y="290" font-size="8">move L</text>
+
+            <!-- CHANCE nodes (NOT a depth level) -->
+            <circle cx="50" cy="330" r="18" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="50" y="334" text-anchor="middle" fill="white" font-size="8">CH</text>
+
+            <circle cx="150" cy="330" r="18" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="150" y="334" text-anchor="middle" fill="white" font-size="8">CH</text>
+
+            <circle cx="250" cy="330" r="18" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="250" y="334" text-anchor="middle" fill="white" font-size="8">CH</text>
+
+            <circle cx="350" cy="330" r="18" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="350" y="334" text-anchor="middle" fill="white" font-size="8">CH</text>
+
+            <circle cx="450" cy="330" r="18" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="450" y="334" text-anchor="middle" fill="white" font-size="8">CH</text>
+
+            <circle cx="550" cy="330" r="18" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="550" y="334" text-anchor="middle" fill="white" font-size="8">CH</text>
+
+            <circle cx="650" cy="330" r="18" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="650" y="334" text-anchor="middle" fill="white" font-size="8">CH</text>
+
+            <circle cx="800" cy="330" r="18" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="800" y="334" text-anchor="middle" fill="white" font-size="8">CH</text>
+
+            <circle cx="900" cy="330" r="18" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="900" y="334" text-anchor="middle" fill="white" font-size="8">CH</text>
+
+            <circle cx="1000" cy="330" r="18" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="1000" y="334" text-anchor="middle" fill="white" font-size="8">CH</text>
+
+            <!-- Lines from CHANCE to MAX (Depth 2) -->
+            <line x1="50" y1="348" x2="50" y2="390" stroke="#333" stroke-width="1"/>
+            <line x1="150" y1="348" x2="150" y2="390" stroke="#333" stroke-width="1"/>
+            <line x1="250" y1="348" x2="250" y2="390" stroke="#333" stroke-width="1"/>
+            <line x1="350" y1="348" x2="350" y2="390" stroke="#333" stroke-width="1"/>
+            <line x1="450" y1="348" x2="450" y2="390" stroke="#333" stroke-width="1"/>
+            <line x1="550" y1="348" x2="550" y2="390" stroke="#333" stroke-width="1"/>
+            <line x1="650" y1="348" x2="650" y2="390" stroke="#333" stroke-width="1"/>
+            <line x1="800" y1="348" x2="800" y2="390" stroke="#333" stroke-width="1"/>
+            <line x1="900" y1="348" x2="900" y2="390" stroke="#333" stroke-width="1"/>
+            <line x1="1000" y1="348" x2="1000" y2="390" stroke="#333" stroke-width="1"/>
+
+            <!-- Depth 2: MAX nodes -->
+            <rect x="30" y="395" width="40" height="30" fill="#2196F3" stroke="#000" stroke-width="2"/>
+            <text x="50" y="415" text-anchor="middle" fill="white" font-size="10">MAX</text>
+
+            <rect x="130" y="395" width="40" height="30" fill="#2196F3" stroke="#000" stroke-width="2"/>
+            <text x="150" y="415" text-anchor="middle" fill="white" font-size="10">MAX</text>
+
+            <rect x="230" y="395" width="40" height="30" fill="#2196F3" stroke="#000" stroke-width="2"/>
+            <text x="250" y="415" text-anchor="middle" fill="white" font-size="10">MAX</text>
+
+            <rect x="330" y="395" width="40" height="30" fill="#2196F3" stroke="#000" stroke-width="2"/>
+            <text x="350" y="415" text-anchor="middle" fill="white" font-size="10">MAX</text>
+
+            <rect x="430" y="395" width="40" height="30" fill="#2196F3" stroke="#000" stroke-width="2"/>
+            <text x="450" y="415" text-anchor="middle" fill="white" font-size="10">MAX</text>
+
+            <rect x="530" y="395" width="40" height="30" fill="#2196F3" stroke="#000" stroke-width="2"/>
+            <text x="550" y="415" text-anchor="middle" fill="white" font-size="10">MAX</text>
+
+            <rect x="630" y="395" width="40" height="30" fill="#2196F3" stroke="#000" stroke-width="2"/>
+            <text x="650" y="415" text-anchor="middle" fill="white" font-size="10">MAX</text>
+
+            <rect x="780" y="395" width="40" height="30" fill="#2196F3" stroke="#000" stroke-width="2"/>
+            <text x="800" y="415" text-anchor="middle" fill="white" font-size="10">MAX</text>
+
+            <rect x="880" y="395" width="40" height="30" fill="#2196F3" stroke="#000" stroke-width="2"/>
+            <text x="900" y="415" text-anchor="middle" fill="white" font-size="10">MAX</text>
+
+            <rect x="980" y="395" width="40" height="30" fill="#2196F3" stroke="#000" stroke-width="2"/>
+            <text x="1000" y="415" text-anchor="middle" fill="white" font-size="10">MAX</text>
+
+            <!-- Lines from MAX to CHANCE (before MIN) -->
+            <line x1="50" y1="425" x2="50" y2="470" stroke="#333" stroke-width="1"/>
+            <line x1="150" y1="425" x2="150" y2="470" stroke="#333" stroke-width="1"/>
+            <line x1="250" y1="425" x2="250" y2="470" stroke="#333" stroke-width="1"/>
+            <line x1="350" y1="425" x2="350" y2="470" stroke="#333" stroke-width="1"/>
+            <line x1="450" y1="425" x2="450" y2="470" stroke="#333" stroke-width="1"/>
+            <line x1="550" y1="425" x2="550" y2="470" stroke="#333" stroke-width="1"/>
+            <line x1="650" y1="425" x2="650" y2="470" stroke="#333" stroke-width="1"/>
+            <line x1="800" y1="425" x2="800" y2="470" stroke="#333" stroke-width="1"/>
+            <line x1="900" y1="425" x2="900" y2="470" stroke="#333" stroke-width="1"/>
+            <line x1="1000" y1="425" x2="1000" y2="470" stroke="#333" stroke-width="1"/>
+
+            <!-- CHANCE nodes before Depth 3 -->
+            <circle cx="50" cy="488" r="15" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="50" y="492" text-anchor="middle" fill="white" font-size="7">CH</text>
+
+            <circle cx="150" cy="488" r="15" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="150" y="492" text-anchor="middle" fill="white" font-size="7">CH</text>
+
+            <circle cx="250" cy="488" r="15" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="250" y="492" text-anchor="middle" fill="white" font-size="7">CH</text>
+
+            <circle cx="350" cy="488" r="15" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="350" y="492" text-anchor="middle" fill="white" font-size="7">CH</text>
+
+            <circle cx="450" cy="488" r="15" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="450" y="492" text-anchor="middle" fill="white" font-size="7">CH</text>
+
+            <circle cx="550" cy="488" r="15" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="550" y="492" text-anchor="middle" fill="white" font-size="7">CH</text>
+
+            <circle cx="650" cy="488" r="15" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="650" y="492" text-anchor="middle" fill="white" font-size="7">CH</text>
+
+            <circle cx="800" cy="488" r="15" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="800" y="492" text-anchor="middle" fill="white" font-size="7">CH</text>
+
+            <circle cx="900" cy="488" r="15" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="900" y="492" text-anchor="middle" fill="white" font-size="7">CH</text>
+
+            <circle cx="1000" cy="488" r="15" fill="#4CAF50" stroke="#000" stroke-width="2"/>
+            <text x="1000" y="492" text-anchor="middle" fill="white" font-size="7">CH</text>
+
+            <!-- Lines to Depth 3 MIN -->
+            <line x1="50" y1="503" x2="50" y2="540" stroke="#333" stroke-width="1"/>
+            <line x1="150" y1="503" x2="150" y2="540" stroke="#333" stroke-width="1"/>
+            <line x1="250" y1="503" x2="250" y2="540" stroke="#333" stroke-width="1"/>
+            <line x1="350" y1="503" x2="350" y2="540" stroke="#333" stroke-width="1"/>
+            <line x1="450" y1="503" x2="450" y2="540" stroke="#333" stroke-width="1"/>
+            <line x1="550" y1="503" x2="550" y2="540" stroke="#333" stroke-width="1"/>
+            <line x1="650" y1="503" x2="650" y2="540" stroke="#333" stroke-width="1"/>
+            <line x1="800" y1="503" x2="800" y2="540" stroke="#333" stroke-width="1"/>
+            <line x1="900" y1="503" x2="900" y2="540" stroke="#333" stroke-width="1"/>
+            <line x1="1000" y1="503" x2="1000" y2="540" stroke="#333" stroke-width="1"/>
+
+            <!-- Depth 3: MIN nodes (terminal - evaluated by heuristic) -->
+            <circle cx="50" cy="560" r="20" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="50" y="565" text-anchor="middle" fill="#f44336" font-size="10">MIN</text>
+
+            <circle cx="150" cy="560" r="20" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="150" y="565" text-anchor="middle" fill="#f44336" font-size="10">MIN</text>
+
+            <circle cx="250" cy="560" r="20" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="250" y="565" text-anchor="middle" fill="#f44336" font-size="10">MIN</text>
+
+            <circle cx="350" cy="560" r="20" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="350" y="565" text-anchor="middle" fill="#f44336" font-size="10">MIN</text>
+
+            <circle cx="450" cy="560" r="20" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="450" y="565" text-anchor="middle" fill="#f44336" font-size="10">MIN</text>
+
+            <circle cx="550" cy="560" r="20" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="550" y="565" text-anchor="middle" fill="#f44336" font-size="10">MIN</text>
+
+            <circle cx="650" cy="560" r="20" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="650" y="565" text-anchor="middle" fill="#f44336" font-size="10">MIN</text>
+
+            <circle cx="800" cy="560" r="20" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="800" y="565" text-anchor="middle" fill="#f44336" font-size="10">MIN</text>
+
+            <circle cx="900" cy="560" r="20" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="900" y="565" text-anchor="middle" fill="#f44336" font-size="10">MIN</text>
+
+            <circle cx="1000" cy="560" r="20" fill="none" stroke="#f44336" stroke-width="2"/>
+            <text x="1000" y="565" text-anchor="middle" fill="#f44336" font-size="10">MIN</text>
+
+            <!-- Lines to leaf values -->
+            <line x1="50" y1="580" x2="50" y2="610" stroke="#333" stroke-width="1"/>
+            <line x1="150" y1="580" x2="150" y2="610" stroke="#333" stroke-width="1"/>
+            <line x1="250" y1="580" x2="250" y2="610" stroke="#333" stroke-width="1"/>
+            <line x1="350" y1="580" x2="350" y2="610" stroke="#333" stroke-width="1"/>
+            <line x1="450" y1="580" x2="450" y2="610" stroke="#333" stroke-width="1"/>
+            <line x1="550" y1="580" x2="550" y2="610" stroke="#333" stroke-width="1"/>
+            <line x1="650" y1="580" x2="650" y2="610" stroke="#333" stroke-width="1"/>
+            <line x1="800" y1="580" x2="800" y2="610" stroke="#333" stroke-width="1"/>
+            <line x1="900" y1="580" x2="900" y2="610" stroke="#333" stroke-width="1"/>
+            <line x1="1000" y1="580" x2="1000" y2="610" stroke="#333" stroke-width="1"/>
+
+            <!-- Leaf values (heuristic evaluations) -->
+            <rect x="30" y="615" width="40" height="25" fill="#eee" stroke="#666"/>
+            <text x="50" y="632" text-anchor="middle" font-size="10">+5</text>
+
+            <rect x="130" y="615" width="40" height="25" fill="#eee" stroke="#666"/>
+            <text x="150" y="632" text-anchor="middle" font-size="10">+2</text>
+
+            <rect x="230" y="615" width="40" height="25" fill="#eee" stroke="#666"/>
+            <text x="250" y="632" text-anchor="middle" font-size="10">-3</text>
+
+            <rect x="330" y="615" width="40" height="25" fill="#eee" stroke="#666"/>
+            <text x="350" y="632" text-anchor="middle" font-size="10">+7</text>
+
+            <rect x="430" y="615" width="40" height="25" fill="#eee" stroke="#666"/>
+            <text x="450" y="632" text-anchor="middle" font-size="10">+1</text>
+
+            <rect x="530" y="615" width="40" height="25" fill="#eee" stroke="#666"/>
+            <text x="550" y="632" text-anchor="middle" font-size="10">-2</text>
+
+            <rect x="630" y="615" width="40" height="25" fill="#eee" stroke="#666"/>
+            <text x="650" y="632" text-anchor="middle" font-size="10">+4</text>
+
+            <rect x="780" y="615" width="40" height="25" fill="#eee" stroke="#666"/>
+            <text x="800" y="632" text-anchor="middle" font-size="10">+6</text>
+
+            <rect x="880" y="615" width="40" height="25" fill="#eee" stroke="#666"/>
+            <text x="900" y="632" text-anchor="middle" font-size="10">0</text>
+
+            <rect x="980" y="615" width="40" height="25" fill="#eee" stroke="#666"/>
+            <text x="1000" y="632" text-anchor="middle" font-size="10">-1</text>
+
+            <!-- Depth labels on left side -->
+            <text x="10" y="45" font-size="11" fill="#2196F3" font-weight="bold">Depth 0 (MAX)</text>
+            <text x="10" y="135" font-size="11" fill="#4CAF50">(chance)</text>
+            <text x="10" y="240" font-size="11" fill="#f44336" font-weight="bold">Depth 1 (MIN)</text>
+            <text x="10" y="334" font-size="11" fill="#4CAF50">(chance)</text>
+            <text x="10" y="415" font-size="11" fill="#2196F3" font-weight="bold">Depth 2 (MAX)</text>
+            <text x="10" y="492" font-size="11" fill="#4CAF50">(chance)</text>
+            <text x="10" y="565" font-size="11" fill="#f44336" font-weight="bold">Depth 3 (MIN)</text>
+            <text x="10" y="632" font-size="11" fill="#666">Leaf (eval)</text>
+
+            <!-- Back-propagation example values -->
+            <text x="550" y="10" text-anchor="middle" font-size="11" fill="#2196F3" font-weight="bold">Value: +2.1 (best)</text>
+
+            <text x="300" y="165" text-anchor="middle" font-size="10" fill="#4CAF50">E[V] = +2.1</text>
+            <text x="800" y="165" text-anchor="middle" font-size="10" fill="#4CAF50">E[V] = +1.8</text>
+
+            <text x="100" y="275" text-anchor="middle" font-size="9" fill="#f44336">min = +2</text>
+            <text x="300" y="275" text-anchor="middle" font-size="9" fill="#f44336">min = -3</text>
+            <text x="500" y="275" text-anchor="middle" font-size="9" fill="#f44336">min = -2</text>
+            <text x="650" y="275" text-anchor="middle" font-size="9" fill="#f44336">min = +4</text>
+            <text x="800" y="275" text-anchor="middle" font-size="9" fill="#f44336">min = +6</text>
+            <text x="950" y="275" text-anchor="middle" font-size="9" fill="#f44336">min = -1</text>
+
+            <!-- Flow direction arrow -->
+            <text x="1050" y="350" font-size="10" fill="#666">Value flows</text>
+            <text x="1050" y="365" font-size="10" fill="#666">UP the tree</text>
+            <line x1="1070" y1="400" x2="1070" y2="330" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+            <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+                </marker>
+            </defs>
+        </svg>
+    </div>
+
+    <h2>How Values Propagate (Bottom-Up)</h2>
+
+    <div class="explanation">
+        <div class="node-explain chance-explain">
+            <h3>1. CHANCE Nodes (Green Filled Circles)</h3>
+            <p><strong>Purpose:</strong> Model the dice roll uncertainty</p>
+            <p><strong>Calculation:</strong> Expected Value = Sum of (probability × child value)</p>
+            <p><strong>Example:</strong> If roll=1 gives value +5 (prob 0.25), roll=2 gives -3 (prob 0.375), roll=4 gives +1 (prob 0.125):</p>
+            <code>E[V] = 0.25×(+5) + 0.375×(-3) + 0.125×(+1) = 1.25 - 1.125 + 0.125 = +0.25</code>
+        </div>
+
+        <div class="node-explain min-explain">
+            <h3>2. MIN Nodes (Empty Red Circles) - Human's Turn</h3>
+            <p><strong>Purpose:</strong> The human opponent tries to minimize the computer's advantage</p>
+            <p><strong>Calculation:</strong> Choose the MINIMUM value among all possible moves</p>
+            <p><strong>Example:</strong> Human can move C (leads to +5) or move D (leads to +2)</p>
+            <code>MIN chooses +2 (worse for computer)</code>
+        </div>
+
+        <div class="node-explain max-explain">
+            <h3>3. MAX Nodes (Blue Squares) - Computer's Turn</h3>
+            <p><strong>Purpose:</strong> Computer tries to maximize its score</p>
+            <p><strong>Calculation:</strong> Choose the MAXIMUM value among all possible moves</p>
+            <p><strong>Example:</strong> Computer can do Move A (value +2.1) or Move B (value +1.8)</p>
+            <code>MAX chooses Move A with +2.1</code>
+        </div>
+    </div>
+
+    <h2>Tree Structure Pattern</h2>
+    <div class="explanation">
+        <p>The tree follows this repeating pattern:</p>
+        <ol>
+            <li><strong>MAX node (Depth N)</strong> - computer has a dice roll, picks best move</li>
+            <li><strong>CHANCE node (no depth)</strong> - models uncertainty of opponent's dice roll</li>
+            <li><strong>MIN node (Depth N+1)</strong> - opponent has a dice roll, picks move that hurts computer most</li>
+            <li><strong>CHANCE node (no depth)</strong> - models uncertainty of computer's next dice roll</li>
+            <li><strong>MAX node (Depth N+2)</strong> - ... and so on until depth limit</li>
+        </ol>
+
+        <p style="background:#ffffcc; padding:10px; border:1px solid #cc0;"><strong>KEY:</strong> CHANCE nodes are "in between" nodes. They don't count as depth levels! Depth only increments at MAX/MIN decision nodes.</p>
+
+        <h3>In Senet Code:</h3>
+        <pre>
+getBestMove()          -> ROOT (Depth 0): evaluates all moves for computer
+  chanceNode()         -> (no depth change) Models opponent's upcoming dice roll
+    minNode()          -> Depth 1: Opponent picks worst move for us
+      chanceNode()     -> (no depth change) Models our upcoming dice roll
+        maxNode()      -> Depth 2: We pick best move
+          chanceNode() -> (no depth change) ...
+            minNode()  -> Depth 3: Continue until depth limit reached
+        </pre>
+    </div>
+
+    <h2>Senet Dice (Sticks) Probabilities</h2>
+    <div class="explanation">
+        <p>In Senet, 4 sticks are thrown. Each stick has 2 sides. The roll value depends on how many sticks land face-up:</p>
+        <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse;">
+            <tr style="background:#ddd;">
+                <th>Sticks Face-Up</th>
+                <th>Roll Value</th>
+                <th>Probability</th>
+                <th>Calculation</th>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td>5</td>
+                <td>6.25%</td>
+                <td>1/16</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>25%</td>
+                <td>4/16</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>2</td>
+                <td>37.5%</td>
+                <td>6/16</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>3</td>
+                <td>25%</td>
+                <td>4/16</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>4</td>
+                <td>6.25%</td>
+                <td>1/16</td>
+            </tr>
+        </table>
+        <p>The CHANCE nodes use these probabilities to calculate expected values!</p>
+    </div>
+
+    <h2>Complete Example Walkthrough</h2>
+    <div class="explanation">
+        <p><strong>Scenario:</strong> Computer rolled 3 and has 2 possible moves.</p>
+
+        <h3>Step 1: Computer (MAX) evaluates moves</h3>
+        <p>Move A: piece 5 → 8 | Move B: piece 10 → 13</p>
+
+        <h3>Step 2: For Move A, create CHANCE node</h3>
+        <p>Human will roll dice. Expected value over all rolls:</p>
+        <ul>
+            <li>If human rolls 1 (25%): MIN node picks best counter → value +2</li>
+            <li>If human rolls 2 (37.5%): MIN node picks best counter → value -3</li>
+            <li>If human rolls 4 (12.5%): MIN node picks best counter → value -2</li>
+            <li>... other rolls ...</li>
+        </ul>
+        <p>E[Move A] = 0.25×(+2) + 0.375×(-3) + 0.125×(-2) + ... = <strong>+2.1</strong></p>
+
+        <h3>Step 3: Similarly calculate Move B</h3>
+        <p>E[Move B] = <strong>+1.8</strong></p>
+
+        <h3>Step 4: MAX picks best</h3>
+        <p><strong>Computer chooses Move A</strong> (value +2.1 > +1.8)</p>
+    </div>
+
+    <h2>Alpha-Beta Pruning</h2>
+    <div class="explanation">
+        <p>The code uses alpha-beta pruning to skip branches that won't affect the final decision:</p>
+        <ul>
+            <li><strong>Alpha:</strong> Best value MAX can guarantee (starts at -infinity)</li>
+            <li><strong>Beta:</strong> Best value MIN can guarantee (starts at +infinity)</li>
+            <li>If beta <= alpha, prune remaining children (they won't be chosen)</li>
+        </ul>
+        <p>This optimization can dramatically reduce the number of nodes explored!</p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senet Game - Complete Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-code: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #334155;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient-1);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.95;
+            position: relative;
+            font-weight: 300;
+        }
+
+        .header .arabic-title {
+            font-size: 1.2rem;
+            margin-top: 15px;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        /* Navigation */
+        .nav-container {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Section */
+        section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h2 .icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 30px 0 20px;
+            color: var(--primary-light);
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 15px;
+            color: var(--secondary);
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .card-icon.models { background: var(--gradient-1); }
+        .card-icon.game { background: var(--gradient-2); }
+        .card-icon.computer { background: var(--gradient-3); }
+        .card-icon.utils { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Code Blocks */
+        pre {
+            background: var(--bg-code);
+            border-radius: 12px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        pre::before {
+            content: attr(data-lang);
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .inline-code {
+            background: var(--bg-code);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--accent);
+            border: 1px solid var(--border);
+        }
+
+        /* Syntax Highlighting */
+        .keyword { color: #c792ea; }
+        .string { color: #c3e88d; }
+        .number { color: #f78c6c; }
+        .comment { color: #546e7a; font-style: italic; }
+        .class-name { color: #ffcb6b; }
+        .function { color: #82aaff; }
+        .operator { color: #89ddff; }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* File Tree */
+        .file-tree {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 25px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            border: 1px solid var(--border);
+        }
+
+        .file-tree .folder {
+            color: var(--accent);
+        }
+
+        .file-tree .file {
+            color: var(--text-secondary);
+        }
+
+        .file-tree .comment {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Flowchart */
+        .flowchart {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 30px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            line-height: 1.4;
+        }
+
+        .flowchart .box {
+            color: var(--primary-light);
+        }
+
+        .flowchart .arrow {
+            color: var(--secondary);
+        }
+
+        .flowchart .label {
+            color: var(--accent);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 2px;
+        }
+
+        .badge-primary { background: var(--primary); color: white; }
+        .badge-secondary { background: var(--secondary); color: white; }
+        .badge-accent { background: var(--accent); color: var(--bg-dark); }
+        .badge-danger { background: var(--danger); color: white; }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        .grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+        /* Info Boxes */
+        .info-box {
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+
+        .info-box.info {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+
+        .info-box.success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--secondary);
+        }
+
+        .info-box.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--accent);
+        }
+
+        .info-box.danger {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--danger);
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Method Signature */
+        .method-signature {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+        }
+
+        .method-body {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+            border: 1px solid var(--border);
+            border-top: none;
+        }
+
+        /* Algorithm Box */
+        .algorithm {
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 20px 0;
+            border: 1px solid var(--border);
+        }
+
+        .algorithm-header {
+            background: var(--gradient-3);
+            padding: 15px 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .algorithm-body {
+            padding: 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .algorithm-body ol {
+            padding-left: 25px;
+        }
+
+        .algorithm-body li {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        /* Collapsible */
+        .collapsible {
+            margin: 15px 0;
+        }
+
+        .collapsible-toggle {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 15px 20px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .collapsible-toggle:hover {
+            background: var(--primary);
+        }
+
+        .collapsible-toggle::after {
+            content: '+';
+            font-size: 1.5rem;
+            font-weight: 300;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-toggle.active::after {
+            transform: rotate(45deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .collapsible-content.show {
+            max-height: 5000px;
+        }
+
+        .collapsible-inner {
+            padding: 20px;
+        }
+
+        /* Special Squares Visual */
+        .special-squares {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .special-square {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .special-square:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        .special-square .symbol {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .special-square .name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .special-square .position {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .special-square .effect {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        /* Probability Chart */
+        .prob-chart {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .prob-bar {
+            flex: 1;
+            min-width: 80px;
+            background: var(--bg-card);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .prob-bar .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .prob-bar .bar {
+            height: 100px;
+            background: var(--bg-dark);
+            border-radius: 5px;
+            margin: 10px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prob-bar .bar-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--gradient-1);
+            border-radius: 5px;
+            transition: height 0.5s ease;
+        }
+
+        .prob-bar .percent {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Board Visual */
+        .board-visual {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+        }
+
+        .board-row {
+            display: flex;
+            justify-content: center;
+            margin: 5px 0;
+        }
+
+        .board-cell {
+            width: 55px;
+            height: 55px;
+            border: 2px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            margin: 2px;
+            border-radius: 8px;
+            background: var(--bg-dark);
+            transition: all 0.3s ease;
+        }
+
+        .board-cell:hover {
+            transform: scale(1.1);
+            border-color: var(--primary);
+        }
+
+        .board-cell.special {
+            border-color: var(--accent);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .board-cell .piece {
+            font-size: 1.2rem;
+        }
+
+        .board-cell .num {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .footer p {
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header .subtitle {
+                font-size: 1rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .nav {
+                gap: 5px;
+            }
+
+            .nav a {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        section {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Weight visualization */
+        .weight-bar {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0;
+        }
+
+        .weight-bar .label {
+            width: 200px;
+            font-weight: 500;
+        }
+
+        .weight-bar .bar-container {
+            flex: 1;
+            height: 30px;
+            background: var(--bg-dark);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .weight-bar .bar-fill {
+            height: 100%;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>Senet Game</h1>
+        <p class="subtitle">Complete Code Documentation</p>
+        <p class="arabic-title">مشروع خوارزميات البحث الذكية 2025-2026</p>
+    </header>
+
+    <!-- Navigation -->
+    <div class="nav-container">
+        <nav class="nav">
+            <a href="#overview">Overview</a>
+            <a href="#hierarchy">Hierarchy</a>
+            <a href="#models">Models</a>
+            <a href="#game">Game</a>
+            <a href="#computer">AI Algorithm</a>
+            <a href="#execution">Execution</a>
+            <a href="#expectiminimax">Expectiminimax</a>
+            <a href="#heuristic">Heuristic</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <!-- Overview Section -->
+        <section id="overview">
+            <h2><span class="icon">📖</span> Project Overview</h2>
+
+            <div class="card">
+                <p>This project implements the ancient Egyptian board game <strong>Senet</strong> with an AI opponent using the <strong>Expectiminimax Algorithm</strong>. The game features:</p>
+
+                <div class="grid grid-2" style="margin-top: 20px;">
+                    <div class="info-box info">
+                        <div class="info-box-title">🎮 Game Features</div>
+                        <ul style="padding-left: 20px; color: var(--text-secondary);">
+                            <li>30-square board with special squares</li>
+                            <li>Two players (Human vs Computer)</li>
+                            <li>Dice rolling using 4 sticks</li>
+                            <li>Configurable AI search depth</li>
+                        </ul>
+                    </div>
+                    <div class="info-box success">
+                        <div class="info-box-title">🤖 AI Features</div>
+                        <ul style="padding-left: 20px; color: var(--text-secondary);">
+                            <li>Expectiminimax algorithm</li>
+                            <li>Alpha-Beta pruning optimization</li>
+                            <li>Multi-factor heuristic evaluation</li>
+                            <li>Probability-weighted decisions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3>What is Senet?</h3>
+            <p>Senet is one of the oldest known board games, dating back to ancient Egypt (around 3100 BCE). The goal is to move all 7 pieces off the board before your opponent.</p>
+
+            <!-- Board Visual -->
+            <h4>Game Board Layout (S-Pattern)</h4>
+            <div class="board-visual">
+                <div class="board-row">
+                    <div class="board-cell"><span class="piece">●</span><span class="num">1</span></div>
+                    <div class="board-cell"><span class="piece">○</span><span class="num">2</span></div>
+                    <div class="board-cell"><span class="piece">●</span><span class="num">3</span></div>
+                    <div class="board-cell"><span class="piece">○</span><span class="num">4</span></div>
+                    <div class="board-cell"><span class="piece">●</span><span class="num">5</span></div>
+                    <div class="board-cell"><span class="piece">○</span><span class="num">6</span></div>
+                    <div class="board-cell"><span class="piece">●</span><span class="num">7</span></div>
+                    <div class="board-cell"><span class="piece">○</span><span class="num">8</span></div>
+                    <div class="board-cell"><span class="piece">●</span><span class="num">9</span></div>
+                    <div class="board-cell"><span class="piece">○</span><span class="num">10</span></div>
+                </div>
+                <div class="board-row">
+                    <div class="board-cell"><span class="num">20</span></div>
+                    <div class="board-cell"><span class="num">19</span></div>
+                    <div class="board-cell"><span class="num">18</span></div>
+                    <div class="board-cell"><span class="num">17</span></div>
+                    <div class="board-cell"><span class="num">16</span></div>
+                    <div class="board-cell special"><span class="piece">☥</span><span class="num">15</span></div>
+                    <div class="board-cell"><span class="piece">○</span><span class="num">14</span></div>
+                    <div class="board-cell"><span class="piece">●</span><span class="num">13</span></div>
+                    <div class="board-cell"><span class="piece">○</span><span class="num">12</span></div>
+                    <div class="board-cell"><span class="piece">●</span><span class="num">11</span></div>
+                </div>
+                <div class="board-row">
+                    <div class="board-cell"><span class="num">21</span></div>
+                    <div class="board-cell"><span class="num">22</span></div>
+                    <div class="board-cell"><span class="num">23</span></div>
+                    <div class="board-cell"><span class="num">24</span></div>
+                    <div class="board-cell"><span class="num">25</span></div>
+                    <div class="board-cell special"><span class="piece">⚮</span><span class="num">26</span></div>
+                    <div class="board-cell special"><span class="piece">≈</span><span class="num">27</span></div>
+                    <div class="board-cell special"><span class="piece">⚶</span><span class="num">28</span></div>
+                    <div class="board-cell special"><span class="piece">☉</span><span class="num">29</span></div>
+                    <div class="board-cell special"><span class="piece">⊙</span><span class="num">30</span></div>
+                </div>
+            </div>
+
+            <h4>Special Squares</h4>
+            <div class="special-squares">
+                <div class="special-square">
+                    <div class="symbol">☥</div>
+                    <div class="name">House of Rebirth</div>
+                    <div class="position">Position 15</div>
+                    <div class="effect">Destination when returning from Water</div>
+                </div>
+                <div class="special-square">
+                    <div class="symbol">⚮</div>
+                    <div class="name">House of Happiness</div>
+                    <div class="position">Position 26</div>
+                    <div class="effect">Must land exactly to pass</div>
+                </div>
+                <div class="special-square">
+                    <div class="symbol">≈</div>
+                    <div class="name">House of Water</div>
+                    <div class="position">Position 27</div>
+                    <div class="effect">Piece sent back to Rebirth (15)</div>
+                </div>
+                <div class="special-square">
+                    <div class="symbol">⚶</div>
+                    <div class="name">House of Three Truths</div>
+                    <div class="position">Position 28</div>
+                    <div class="effect">Need roll of 3 to exit</div>
+                </div>
+                <div class="special-square">
+                    <div class="symbol">☉</div>
+                    <div class="name">House of Re-Atoum</div>
+                    <div class="position">Position 29</div>
+                    <div class="effect">Need roll of 2 to exit</div>
+                </div>
+                <div class="special-square">
+                    <div class="symbol">⊙</div>
+                    <div class="name">House of Horus</div>
+                    <div class="position">Position 30</div>
+                    <div class="effect">Any roll allows exit</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hierarchy Section -->
+        <section id="hierarchy">
+            <h2><span class="icon">📁</span> Project Hierarchy</h2>
+
+            <div class="file-tree">
+<pre>
+<span class="folder">senet/</span>
+├── <span class="folder">src/</span>                              <span class="comment"># Source code</span>
+│   ├── <span class="file">Main.java</span>                     <span class="comment"># Entry point</span>
+│   │
+│   ├── <span class="folder">models/</span>                       <span class="comment"># Data models</span>
+│   │   ├── <span class="file">Board.java</span>               <span class="comment"># Game board (30 squares)</span>
+│   │   ├── <span class="file">GameState.java</span>           <span class="comment"># Current game state</span>
+│   │   ├── <span class="file">Move.java</span>                <span class="comment"># Move representation</span>
+│   │   ├── <span class="file">Player.java</span>              <span class="comment"># Player enum (WHITE/BLACK)</span>
+│   │   └── <span class="file">Square.java</span>              <span class="comment"># Special squares enum</span>
+│   │
+│   ├── <span class="folder">game/</span>                         <span class="comment"># Game logic & UI</span>
+│   │   ├── <span class="file">GameController.java</span>      <span class="comment"># Main game loop</span>
+│   │   ├── <span class="file">GameRules.java</span>           <span class="comment"># Rules and move validation</span>
+│   │   ├── <span class="file">BoardDisplay.java</span>        <span class="comment"># Console UI</span>
+│   │   └── <span class="file">SticksManager.java</span>       <span class="comment"># Dice/sticks simulation</span>
+│   │
+│   ├── <span class="folder">computer/</span>                     <span class="comment"># AI Algorithm</span>
+│   │   ├── <span class="file">Expectiminimax.java</span>      <span class="comment"># Main AI algorithm</span>
+│   │   ├── <span class="file">Heuristic.java</span>           <span class="comment"># Board evaluation</span>
+│   │   ├── <span class="file">GameStats.java</span>           <span class="comment"># Search statistics</span>
+│   │   ├── <span class="file">GameResult.java</span>          <span class="comment"># Search result container</span>
+│   │   └── <span class="file">TurnType.java</span>            <span class="comment"># Node type enum</span>
+│   │
+│   └── <span class="folder">utils/</span>                        <span class="comment"># Utilities</span>
+│       └── <span class="file">Constants.java</span>           <span class="comment"># Game constants</span>
+│
+├── <span class="folder">bin/</span>                              <span class="comment"># Compiled classes</span>
+├── <span class="file">SenetGame.jar</span>                     <span class="comment"># Executable JAR</span>
+└── <span class="file">run.sh / run.bat</span>                 <span class="comment"># Run scripts</span>
+</pre>
+            </div>
+
+            <h3>Package Structure</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Package</th>
+                            <th>Purpose</th>
+                            <th>Files</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-primary">models</span></td>
+                            <td>Data structures representing game entities</td>
+                            <td>5 files</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-secondary">game</span></td>
+                            <td>Game mechanics, rules, and user interface</td>
+                            <td>4 files</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-accent">computer</span></td>
+                            <td>AI algorithm implementation</td>
+                            <td>5 files</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-danger">utils</span></td>
+                            <td>Shared constants</td>
+                            <td>1 file</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Models Section -->
+        <section id="models">
+            <h2><span class="icon">📦</span> Models Package</h2>
+
+            <!-- Player.java -->
+            <div class="collapsible">
+                <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+                    <span>1. Player.java (Enum)</span>
+                </button>
+                <div class="collapsible-content">
+                    <div class="collapsible-inner">
+                        <p><strong>Purpose:</strong> Represents the two players in the game.</p>
+
+                        <pre data-lang="java"><code><span class="keyword">public enum</span> <span class="class-name">Player</span> {
+    <span class="function">WHITE</span>(<span class="number">0</span>, <span class="string">"●"</span>),  <span class="comment">// First player (Human by default)</span>
+    <span class="function">BLACK</span>(<span class="number">1</span>, <span class="string">"○"</span>);  <span class="comment">// Second player (Computer by default)</span>
+
+    <span class="keyword">private final int</span> id;
+    <span class="keyword">private final</span> <span class="class-name">String</span> symbol;
+
+    <span class="keyword">public</span> <span class="class-name">Player</span> <span class="function">opponent</span>() {
+        <span class="keyword">return this</span> == WHITE ? BLACK : WHITE;
+    }
+}</code></pre>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr><th>Method</th><th>Returns</th><th>Description</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><code class="inline-code">getId()</code></td><td>int</td><td>Returns player ID (0 or 1)</td></tr>
+                                    <tr><td><code class="inline-code">getSymbol()</code></td><td>String</td><td>Returns display symbol (● or ○)</td></tr>
+                                    <tr><td><code class="inline-code">opponent()</code></td><td>Player</td><td>Returns the opposite player</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Board.java -->
+            <div class="collapsible">
+                <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+                    <span>2. Board.java (Class)</span>
+                </button>
+                <div class="collapsible-content">
+                    <div class="collapsible-inner">
+                        <p><strong>Purpose:</strong> Represents the 30-square game board and manages piece positions.</p>
+
+                        <div class="info-box warning">
+                            <div class="info-box-title">📋 Initial Setup</div>
+                            <ul style="padding-left: 20px; color: var(--text-secondary);">
+                                <li>Squares 1-14: Alternating WHITE (●) and BLACK (○) pieces</li>
+                                <li>Odd positions (1,3,5,7,9,11,13): WHITE</li>
+                                <li>Even positions (2,4,6,8,10,12,14): BLACK</li>
+                                <li>Squares 15-30: Empty</li>
+                            </ul>
+                        </div>
+
+                        <pre data-lang="java"><code><span class="keyword">public class</span> <span class="class-name">Board</span> {
+    <span class="keyword">private static final int</span> BOARD_SIZE = <span class="number">30</span>;
+    <span class="keyword">private</span> <span class="class-name">Player</span>[] squares; <span class="comment">// null = empty</span>
+
+    <span class="keyword">public</span> <span class="function">Board</span>() { ... }           <span class="comment">// New board with initial setup</span>
+    <span class="keyword">public</span> <span class="function">Board</span>(<span class="class-name">Board</span> other) { ... } <span class="comment">// Copy constructor</span>
+}</code></pre>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr><th>Method</th><th>Parameters</th><th>Description</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><code class="inline-code">getPieceAt()</code></td><td>position (1-30)</td><td>Gets piece at position</td></tr>
+                                    <tr><td><code class="inline-code">setPieceAt()</code></td><td>position, player</td><td>Places piece at position</td></tr>
+                                    <tr><td><code class="inline-code">removePieceAt()</code></td><td>position</td><td>Removes piece from position</td></tr>
+                                    <tr><td><code class="inline-code">isEmpty()</code></td><td>position</td><td>Checks if square is empty</td></tr>
+                                    <tr><td><code class="inline-code">getPiecePositions()</code></td><td>player</td><td>Returns all positions of player's pieces</td></tr>
+                                    <tr><td><code class="inline-code">countPieces()</code></td><td>player</td><td>Counts player's pieces on board</td></tr>
+                                    <tr><td><code class="inline-code">clone()</code></td><td>-</td><td>Creates deep copy of board</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GameState.java -->
+            <div class="collapsible">
+                <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+                    <span>3. GameState.java (Class)</span>
+                </button>
+                <div class="collapsible-content">
+                    <div class="collapsible-inner">
+                        <p><strong>Purpose:</strong> Encapsulates the complete state of the game at any moment.</p>
+
+                        <pre data-lang="java"><code><span class="keyword">public class</span> <span class="class-name">GameState</span> {
+    <span class="keyword">private</span> <span class="class-name">Board</span> board;
+    <span class="keyword">private</span> <span class="class-name">Player</span> currentPlayer;
+    <span class="keyword">private int</span> whitePiecesExited;
+    <span class="keyword">private int</span> blackPiecesExited;
+    <span class="keyword">private boolean</span> gameOver;
+    <span class="keyword">private</span> <span class="class-name">Player</span> winner;
+}</code></pre>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr><th>Method</th><th>Description</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><code class="inline-code">getBoard()</code></td><td>Returns current board</td></tr>
+                                    <tr><td><code class="inline-code">getCurrentPlayer()</code></td><td>Returns whose turn it is</td></tr>
+                                    <tr><td><code class="inline-code">switchPlayer()</code></td><td>Switches to opponent's turn</td></tr>
+                                    <tr><td><code class="inline-code">getPiecesExited(Player)</code></td><td>Returns exited pieces count</td></tr>
+                                    <tr><td><code class="inline-code">incrementPiecesExited(Player)</code></td><td>Increases exit count</td></tr>
+                                    <tr><td><code class="inline-code">isGameOver()</code></td><td>Checks if game ended</td></tr>
+                                    <tr><td><code class="inline-code">setGameOver(Player)</code></td><td>Marks game as ended with winner</td></tr>
+                                    <tr><td><code class="inline-code">clone()</code></td><td>Deep copy of state</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Move.java -->
+            <div class="collapsible">
+                <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+                    <span>4. Move.java (Class)</span>
+                </button>
+                <div class="collapsible-content">
+                    <div class="collapsible-inner">
+                        <p><strong>Purpose:</strong> Immutable representation of a single move.</p>
+
+                        <div class="grid grid-3">
+                            <div class="info-box info">
+                                <div class="info-box-title">MOVE</div>
+                                <p>Normal movement to empty square</p>
+                            </div>
+                            <div class="info-box warning">
+                                <div class="info-box-title">SWAP</div>
+                                <p>Exchange positions with opponent's piece</p>
+                            </div>
+                            <div class="info-box success">
+                                <div class="info-box-title">EXIT</div>
+                                <p>Piece leaves the board (toPosition > 30)</p>
+                            </div>
+                        </div>
+
+                        <pre data-lang="java"><code><span class="keyword">public class</span> <span class="class-name">Move</span> {
+    <span class="keyword">private final int</span> fromPosition;
+    <span class="keyword">private final int</span> toPosition;
+    <span class="keyword">private final</span> <span class="class-name">Player</span> player;
+    <span class="keyword">private final boolean</span> isSwap;
+    <span class="keyword">private final boolean</span> isExit;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Square.java -->
+            <div class="collapsible">
+                <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+                    <span>5. Square.java (Enum)</span>
+                </button>
+                <div class="collapsible-content">
+                    <div class="collapsible-inner">
+                        <p><strong>Purpose:</strong> Defines special squares on the board with their effects.</p>
+
+                        <pre data-lang="java"><code><span class="keyword">public enum</span> <span class="class-name">Square</span> {
+    <span class="function">NORMAL</span>(<span class="number">0</span>, <span class="string">" "</span>),
+    <span class="function">REBIRTH</span>(<span class="number">15</span>, <span class="string">"☥"</span>),
+    <span class="function">HAPPINESS</span>(<span class="number">26</span>, <span class="string">"⚮"</span>),
+    <span class="function">WATER</span>(<span class="number">27</span>, <span class="string">"≈"</span>),
+    <span class="function">THREE_TRUTHS</span>(<span class="number">28</span>, <span class="string">"⚶"</span>),
+    <span class="function">RE_ATOUM</span>(<span class="number">29</span>, <span class="string">"☉"</span>),
+    <span class="function">HORUS</span>(<span class="number">30</span>, <span class="string">"⊙"</span>)
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Section -->
+        <section id="game">
+            <h2><span class="icon">🎮</span> Game Package</h2>
+
+            <!-- GameController.java -->
+            <div class="collapsible">
+                <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+                    <span>1. GameController.java - Main Game Loop</span>
+                </button>
+                <div class="collapsible-content">
+                    <div class="collapsible-inner">
+                        <p><strong>Purpose:</strong> Main controller that orchestrates the game flow.</p>
+
+                        <h4>Constructor</h4>
+                        <pre data-lang="java"><code><span class="keyword">public</span> <span class="function">GameController</span>(<span class="keyword">int</span> searchDepth, <span class="keyword">boolean</span> verbose, <span class="keyword">boolean</span> aiFirst)</code></pre>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr><th>Parameter</th><th>Description</th><th>Default</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>searchDepth</td><td>How deep the AI searches</td><td>6</td></tr>
+                                    <tr><td>verbose</td><td>Show algorithm details</td><td>false</td></tr>
+                                    <tr><td>aiFirst</td><td>Computer plays WHITE (first)</td><td>false</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h4>playGame() - Main Loop</h4>
+                        <div class="algorithm">
+                            <div class="algorithm-header">📋 Algorithm</div>
+                            <div class="algorithm-body">
+                                <ol>
+                                    <li>Display welcome message</li>
+                                    <li>WHILE game not over:
+                                        <ol type="a">
+                                            <li>Display board</li>
+                                            <li>Roll sticks (get random 1-5)</li>
+                                            <li>IF current player is human → call humanTurn(roll)</li>
+                                            <li>ELSE → call computerTurn(roll)</li>
+                                        </ol>
+                                    </li>
+                                    <li>Call gameOver() to display results</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <h4>humanTurn(int roll)</h4>
+                        <div class="algorithm">
+                            <div class="algorithm-header">📋 Algorithm</div>
+                            <div class="algorithm-body">
+                                <ol>
+                                    <li>Get legal moves for current roll</li>
+                                    <li>IF no legal moves → print message, switch player, return</li>
+                                    <li>Display legal moves list</li>
+                                    <li>Prompt for move selection (1-N)</li>
+                                    <li>Validate input</li>
+                                    <li>Apply selected move</li>
+                                    <li>Check if game over</li>
+                                    <li>Switch player</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <h4>computerTurn(int roll)</h4>
+                        <div class="algorithm">
+                            <div class="algorithm-header">📋 Algorithm</div>
+                            <div class="algorithm-body">
+                                <ol>
+                                    <li>Print "Computer is thinking..."</li>
+                                    <li>Create Expectiminimax instance</li>
+                                    <li>Get best move from AI</li>
+                                    <li>IF no legal move → switch player, return</li>
+                                    <li>Display chosen move</li>
+                                    <li>IF verbose → print statistics</li>
+                                    <li>Apply move</li>
+                                    <li>Check if game over</li>
+                                    <li>Switch player</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GameRules.java -->
+            <div class="collapsible">
+                <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+                    <span>2. GameRules.java - Rules & Move Validation</span>
+                </button>
+                <div class="collapsible-content">
+                    <div class="collapsible-inner">
+                        <p><strong>Purpose:</strong> Contains all game rules and move validation logic.</p>
+
+                        <h4>getLegalMoves(GameState state, int roll) → List&lt;Move&gt;</h4>
+                        <div class="info-box danger">
+                            <div class="info-box-title">⚠️ The Most Important Method</div>
+                            <p>Generates all valid moves for the current state and roll.</p>
+                        </div>
+
+                        <div class="algorithm">
+                            <div class="algorithm-header">📋 Algorithm</div>
+                            <div class="algorithm-body">
+                                <ol>
+                                    <li>Get current player's piece positions</li>
+                                    <li>FOR each piece position:
+                                        <ol type="a">
+                                            <li>Calculate target = position + roll</li>
+                                            <li>IF piece on special exit squares (26-30) → check special exit conditions</li>
+                                            <li>IF target == 26 (House of Happiness) → must land exactly</li>
+                                            <li>IF target > 26 AND from < 26 → ILLEGAL (can't pass 26)</li>
+                                            <li>IF target > 30 → add EXIT move</li>
+                                            <li>IF target is empty → add normal MOVE</li>
+                                            <li>IF target has opponent → add SWAP move</li>
+                                            <li>IF target has own piece → ILLEGAL (blocked)</li>
+                                        </ol>
+                                    </li>
+                                    <li>Return list of legal moves</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <h4>Special Square Exit Conditions</h4>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr><th>From Position</th><th>Condition</th><th>Result</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>26 (Happiness)</td><td>roll takes past 30</td><td>EXIT</td></tr>
+                                    <tr><td>28 (Three Truths)</td><td>roll == 3</td><td>EXIT</td></tr>
+                                    <tr><td>28 (Three Truths)</td><td>roll != 3</td><td>Return to position 15</td></tr>
+                                    <tr><td>29 (Re-Atoum)</td><td>roll == 2</td><td>EXIT</td></tr>
+                                    <tr><td>29 (Re-Atoum)</td><td>roll != 2</td><td>Return to position 15</td></tr>
+                                    <tr><td>30 (Horus)</td><td>any roll</td><td>EXIT</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h4>applyMove(GameState state, Move move) → GameState</h4>
+                        <div class="algorithm">
+                            <div class="algorithm-header">📋 Algorithm</div>
+                            <div class="algorithm-body">
+                                <ol>
+                                    <li>Clone current state (immutable pattern)</li>
+                                    <li>IF move is EXIT:
+                                        <ol type="a">
+                                            <li>Remove piece from board</li>
+                                            <li>Increment pieces exited</li>
+                                            <li>IF 7 pieces exited → game over, set winner</li>
+                                        </ol>
+                                    </li>
+                                    <li>ELSE IF move is SWAP:
+                                        <ol type="a">
+                                            <li>Put opponent at fromPosition</li>
+                                            <li>Put player at toPosition</li>
+                                        </ol>
+                                    </li>
+                                    <li>ELSE (normal move):
+                                        <ol type="a">
+                                            <li>Remove from fromPosition</li>
+                                            <li>Place at toPosition</li>
+                                            <li>Apply special square effects (Water → Rebirth)</li>
+                                        </ol>
+                                    </li>
+                                    <li>Return new state</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SticksManager.java -->
+            <div class="collapsible">
+                <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+                    <span>3. SticksManager.java - Dice Probability System</span>
+                </button>
+                <div class="collapsible-content">
+                    <div class="collapsible-inner">
+                        <p><strong>Purpose:</strong> Simulates the ancient stick-throwing dice mechanism.</p>
+
+                        <div class="info-box info">
+                            <div class="info-box-title">🎲 How Sticks Work</div>
+                            <ul style="padding-left: 20px; color: var(--text-secondary);">
+                                <li>4 sticks are thrown</li>
+                                <li>Each stick lands either dark (■) or light (□)</li>
+                                <li>Roll value = number of dark sticks</li>
+                                <li><strong>Exception:</strong> 0 dark sticks = roll of 5</li>
+                            </ul>
+                        </div>
+
+                        <h4>Probability Distribution</h4>
+                        <div class="prob-chart">
+                            <div class="prob-bar">
+                                <div class="value">1</div>
+                                <div class="bar"><div class="bar-fill" style="height: 66.7%;"></div></div>
+                                <div class="percent">25%</div>
+                            </div>
+                            <div class="prob-bar">
+                                <div class="value">2</div>
+                                <div class="bar"><div class="bar-fill" style="height: 100%;"></div></div>
+                                <div class="percent">37.5%</div>
+                            </div>
+                            <div class="prob-bar">
+                                <div class="value">3</div>
+                                <div class="bar"><div class="bar-fill" style="height: 66.7%;"></div></div>
+                                <div class="percent">25%</div>
+                            </div>
+                            <div class="prob-bar">
+                                <div class="value">4</div>
+                                <div class="bar"><div class="bar-fill" style="height: 16.7%;"></div></div>
+                                <div class="percent">6.25%</div>
+                            </div>
+                            <div class="prob-bar">
+                                <div class="value">5</div>
+                                <div class="bar"><div class="bar-fill" style="height: 16.7%;"></div></div>
+                                <div class="percent">6.25%</div>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr><th>Dark Sticks</th><th>Roll Value</th><th>Combinations</th><th>Probability</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>1</td><td>1</td><td>C(4,1) = 4</td><td>4/16 = 0.25</td></tr>
+                                    <tr><td>2</td><td>2</td><td>C(4,2) = 6</td><td>6/16 = 0.375</td></tr>
+                                    <tr><td>3</td><td>3</td><td>C(4,3) = 4</td><td>4/16 = 0.25</td></tr>
+                                    <tr><td>4</td><td>4</td><td>C(4,4) = 1</td><td>1/16 = 0.0625</td></tr>
+                                    <tr><td>0</td><td>5</td><td>C(4,0) = 1</td><td>1/16 = 0.0625</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BoardDisplay.java -->
+            <div class="collapsible">
+                <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+                    <span>4. BoardDisplay.java - Console UI</span>
+                </button>
+                <div class="collapsible-content">
+                    <div class="collapsible-inner">
+                        <p><strong>Purpose:</strong> Handles console visualization of the game.</p>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr><th>Method</th><th>Description</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><code class="inline-code">printBoard(GameState)</code></td><td>Prints complete board with game info</td></tr>
+                                    <tr><td><code class="inline-code">printRow(Board, start, end, reverse)</code></td><td>Prints one row of squares</td></tr>
+                                    <tr><td><code class="inline-code">printSquare(Board, position)</code></td><td>Prints single square with piece/symbol</td></tr>
+                                    <tr><td><code class="inline-code">printGameInfo(GameState)</code></td><td>Prints current player and piece counts</td></tr>
+                                    <tr><td><code class="inline-code">printMove(Move, roll)</code></td><td>Prints move details</td></tr>
+                                    <tr><td><code class="inline-code">printLegalMoves(List&lt;Move&gt;)</code></td><td>Prints numbered list of legal moves</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Computer Section -->
+        <section id="computer">
+            <h2><span class="icon">🤖</span> Computer Package (AI Algorithm)</h2>
+
+            <div class="info-box success">
+                <div class="info-box-title">💡 This is the core of the AI system</div>
+                <p>The computer package contains the Expectiminimax algorithm that enables the AI to make intelligent decisions considering both strategy and randomness (dice rolls).</p>
+            </div>
+
+            <!-- TurnType.java -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon computer">🔄</div>
+                    <div>
+                        <div class="card-title">TurnType.java (Enum)</div>
+                        <div class="card-subtitle">Node types in the game tree</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-3">
+                    <div class="info-box info">
+                        <div class="info-box-title">MAX</div>
+                        <p>Computer's turn - wants to <strong>maximize</strong> score</p>
+                    </div>
+                    <div class="info-box danger">
+                        <div class="info-box-title">MIN</div>
+                        <p>Opponent's turn - wants to <strong>minimize</strong> score</p>
+                    </div>
+                    <div class="info-box warning">
+                        <div class="info-box-title">CHANCE</div>
+                        <p>Dice roll - calculates <strong>expected value</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GameStats.java -->
+            <div class="collapsible">
+                <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+                    <span>GameStats.java - Search Statistics Tracker</span>
+                </button>
+                <div class="collapsible-content">
+                    <div class="collapsible-inner">
+                        <p><strong>Purpose:</strong> Tracks statistics during AI search.</p>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr><th>Attribute</th><th>Type</th><th>Description</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>nodesExplored</td><td>int</td><td>Total nodes visited</td></tr>
+                                    <tr><td>maxNodes</td><td>int</td><td>MAX nodes visited</td></tr>
+                                    <tr><td>minNodes</td><td>int</td><td>MIN nodes visited</td></tr>
+                                    <tr><td>chanceNodes</td><td>int</td><td>CHANCE nodes visited</td></tr>
+                                    <tr><td>maxDepthReached</td><td>int</td><td>Deepest level reached</td></tr>
+                                    <tr><td>startTime / endTime</td><td>long</td><td>Search duration timestamps</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expectiminimax Section -->
+        <section id="expectiminimax">
+            <h2><span class="icon">🧠</span> Expectiminimax Algorithm</h2>
+
+            <div class="card">
+                <h3>Why Expectiminimax?</h3>
+                <p>In games with <strong>randomness</strong> (dice, cards), we cannot use standard Minimax because:</p>
+                <ul style="padding-left: 20px; color: var(--text-secondary); margin-bottom: 20px;">
+                    <li>We don't know what dice will roll</li>
+                    <li>Different rolls lead to different legal moves</li>
+                    <li>We must consider <strong>all possible outcomes</strong></li>
+                </ul>
+                <p><strong>Solution:</strong> Insert CHANCE nodes that calculate <strong>expected values</strong>.</p>
+            </div>
+
+            <h3>Algorithm Structure</h3>
+
+            <!-- getBestMove -->
+            <div class="method-signature">
+                Move getBestMove(GameState state, int roll, int maxDepth)
+            </div>
+            <div class="method-body">
+                <p><strong>Entry point</strong> for the AI. Finds the best move for given state and roll.</p>
+                <div class="algorithm">
+                    <div class="algorithm-header">📋 Algorithm</div>
+                    <div class="algorithm-body">
+                        <ol>
+                            <li>Reset statistics</li>
+                            <li>Get all legal moves for current roll</li>
+                            <li>IF no legal moves → return null</li>
+                            <li>IF only one move → return that move (no search needed)</li>
+                            <li>bestValue = -∞, bestMove = null</li>
+                            <li>FOR each legal move:
+                                <ol type="a">
+                                    <li>Apply move to get next state</li>
+                                    <li>Switch player (opponent's turn)</li>
+                                    <li>value = chanceNode(nextState, depth-1, -∞, +∞, false)</li>
+                                    <li>IF value > bestValue → update bestValue, bestMove</li>
+                                </ol>
+                            </li>
+                            <li>Return bestMove</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- chanceNode -->
+            <div class="method-signature" style="margin-top: 30px;">
+                double chanceNode(state, depth, alpha, beta, isMaxPlayer)
+            </div>
+            <div class="method-body">
+                <p><strong>Calculates expected value</strong> over all possible dice outcomes.</p>
+                <div class="algorithm">
+                    <div class="algorithm-header">📋 Algorithm</div>
+                    <div class="algorithm-body">
+                        <ol>
+                            <li>Increment CHANCE node counter</li>
+                            <li>IF depth == 0 OR game over → return Heuristic.evaluate()</li>
+                            <li>expectedValue = 0.0</li>
+                            <li>FOR each roll in [1, 2, 3, 4, 5]:
+                                <ol type="a">
+                                    <li>probability = getProbability(roll)</li>
+                                    <li>IF isMaxPlayer → value = maxNode(...)</li>
+                                    <li>ELSE → value = minNode(...)</li>
+                                    <li>expectedValue += probability × value</li>
+                                </ol>
+                            </li>
+                            <li>Return expectedValue</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="info-box info" style="margin-top: 20px;">
+                    <div class="info-box-title">📐 Mathematical Formula</div>
+                    <pre style="background: transparent; border: none; padding: 10px 0; margin: 0;"><code>E[V] = Σ P(roll) × Value(roll)
+     = 0.25×V(1) + 0.375×V(2) + 0.25×V(3) + 0.0625×V(4) + 0.0625×V(5)</code></pre>
+                </div>
+            </div>
+
+            <!-- maxNode -->
+            <div class="method-signature" style="margin-top: 30px;">
+                double maxNode(state, depth, alpha, beta, roll)
+            </div>
+            <div class="method-body">
+                <p><strong>Computer's turn</strong> - tries to MAXIMIZE the score.</p>
+                <div class="algorithm">
+                    <div class="algorithm-header">📋 Algorithm</div>
+                    <div class="algorithm-body">
+                        <ol>
+                            <li>Get legal moves for given roll</li>
+                            <li>IF no legal moves → clone state, switch player, return chanceNode()</li>
+                            <li>maxValue = -∞</li>
+                            <li>FOR each legal move:
+                                <ol type="a">
+                                    <li>Apply move, switch player</li>
+                                    <li>value = chanceNode(nextState, depth-1, alpha, beta, false)</li>
+                                    <li>maxValue = max(maxValue, value)</li>
+                                    <li>alpha = max(alpha, value)</li>
+                                    <li><strong>IF beta ≤ alpha → BREAK</strong> (Alpha-Beta Pruning)</li>
+                                </ol>
+                            </li>
+                            <li>Return maxValue</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- minNode -->
+            <div class="method-signature" style="margin-top: 30px;">
+                double minNode(state, depth, alpha, beta, roll)
+            </div>
+            <div class="method-body">
+                <p><strong>Opponent's turn</strong> - tries to MINIMIZE the score.</p>
+                <div class="algorithm">
+                    <div class="algorithm-header">📋 Algorithm</div>
+                    <div class="algorithm-body">
+                        <ol>
+                            <li>Get legal moves for given roll</li>
+                            <li>IF no legal moves → clone state, switch player, return chanceNode()</li>
+                            <li>minValue = +∞</li>
+                            <li>FOR each legal move:
+                                <ol type="a">
+                                    <li>Apply move, switch player</li>
+                                    <li>value = chanceNode(nextState, depth-1, alpha, beta, true)</li>
+                                    <li>minValue = min(minValue, value)</li>
+                                    <li>beta = min(beta, value)</li>
+                                    <li><strong>IF beta ≤ alpha → BREAK</strong> (Alpha-Beta Pruning)</li>
+                                </ol>
+                            </li>
+                            <li>Return minValue</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Game Tree Visualization</h3>
+            <div class="flowchart">
+<pre>
+                        <span class="box">[ROOT - Current State]</span>
+                               |
+            ┌──────────────────┼──────────────────┐
+            ↓                  ↓                  ↓
+        <span class="label">[Move 1]</span>           <span class="label">[Move 2]</span>           <span class="label">[Move 3]</span>
+            |                  |                  |
+            ↓                  ↓                  ↓
+      <span class="box">[CHANCE Node]</span>      <span class="box">[CHANCE Node]</span>      <span class="box">[CHANCE Node]</span>
+      (Opponent rolls dice)
+            |
+    ┌───┬───┬───┬───┬───┐
+    ↓   ↓   ↓   ↓   ↓
+  <span class="label">R=1</span> <span class="label">R=2</span> <span class="label">R=3</span> <span class="label">R=4</span> <span class="label">R=5</span>   (Weighted by probability)
+  .25 .375 .25 .0625 .0625
+    |   |   |   |   |
+    ↓   ↓   ↓   ↓   ↓
+  <span class="box">[MIN]</span> <span class="box">[MIN]</span> ...           (Opponent chooses minimum)
+    |
+    ↓
+  <span class="box">[CHANCE Node]</span>              (Computer rolls dice)
+    |
+  <span class="box">[MAX]</span>                        (Computer chooses maximum)
+    |
+   ...                         (Continue until depth=0)
+</pre>
+            </div>
+
+            <h3>Alpha-Beta Pruning</h3>
+            <div class="card">
+                <p>Alpha-Beta pruning optimizes the search by eliminating branches that cannot affect the final decision.</p>
+
+                <div class="grid grid-2" style="margin-top: 20px;">
+                    <div class="info-box info">
+                        <div class="info-box-title">α (Alpha)</div>
+                        <p>Best value MAX can guarantee (starts at -∞)</p>
+                    </div>
+                    <div class="info-box danger">
+                        <div class="info-box-title">β (Beta)</div>
+                        <p>Best value MIN can guarantee (starts at +∞)</p>
+                    </div>
+                </div>
+
+                <div class="info-box warning" style="margin-top: 20px;">
+                    <div class="info-box-title">⚡ Pruning Condition: β ≤ α</div>
+                    <p>When this condition is met, we can skip remaining branches because they won't affect the result.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Heuristic Section -->
+        <section id="heuristic">
+            <h2><span class="icon">📊</span> Heuristic Function</h2>
+
+            <div class="card">
+                <h3>Evaluation Formula</h3>
+                <pre style="background: var(--bg-dark); padding: 20px; border-radius: 10px;"><code>Score = (PiecesExited × 1000) + (Advancement × 10) + (Safety × 5)
+      + (SpecialSquares × 20) + (Blocking × 15)</code></pre>
+            </div>
+
+            <h3>Weight Visualization</h3>
+            <div class="card">
+                <div class="weight-bar">
+                    <div class="label">Pieces Exited</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 100%; background: var(--gradient-1);">1000</div>
+                    </div>
+                </div>
+                <div class="weight-bar">
+                    <div class="label">Special Squares</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 20%; background: var(--gradient-2);">20</div>
+                    </div>
+                </div>
+                <div class="weight-bar">
+                    <div class="label">Opponent Blocking</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 15%; background: var(--gradient-3);">15</div>
+                    </div>
+                </div>
+                <div class="weight-bar">
+                    <div class="label">Advancement</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 10%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">10</div>
+                    </div>
+                </div>
+                <div class="weight-bar">
+                    <div class="label">Safety</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 5%; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">5</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Scoring Components</h3>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <h4>1. Pieces Exited (Weight: 1000)</h4>
+                    <p>Most important - directly related to winning condition.</p>
+                    <pre data-lang="java"><code>score += (myExited - opponentExited) × 1000</code></pre>
+                </div>
+
+                <div class="card">
+                    <h4>2. Advancement Score (Weight: 10)</h4>
+                    <p>Rewards pieces closer to exiting. Uses quadratic formula.</p>
+                    <pre data-lang="java"><code><span class="keyword">for</span> (pos : positions)
+    playerSum += pos × pos; <span class="comment">// Quadratic</span></code></pre>
+                </div>
+
+                <div class="card">
+                    <h4>3. Safety Score (Weight: 5)</h4>
+                    <p>Rewards pieces in safe zones.</p>
+                    <pre data-lang="java"><code><span class="keyword">if</span> (pos >= <span class="number">26</span>) safetyScore += <span class="number">3.0</span>;
+<span class="keyword">else if</span> (pos > <span class="number">15</span>) safetyScore += <span class="number">1.0</span>;</code></pre>
+                </div>
+
+                <div class="card">
+                    <h4>4. Special Squares (Weight: 20)</h4>
+                    <p>Evaluates special square occupancy.</p>
+                    <div class="table-container">
+                        <table>
+                            <tr><td>Position 27 (Water)</td><td style="color: var(--danger);">-50</td></tr>
+                            <tr><td>Position 26 (Happiness)</td><td style="color: var(--secondary);">+25</td></tr>
+                            <tr><td>Position 28 (Three Truths)</td><td style="color: var(--secondary);">+30</td></tr>
+                            <tr><td>Position 29 (Re-Atoum)</td><td style="color: var(--secondary);">+35</td></tr>
+                            <tr><td>Position 30 (Horus)</td><td style="color: var(--secondary);">+40</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Execution Flow Section -->
+        <section id="execution">
+            <h2><span class="icon">▶️</span> Execution Flow</h2>
+
+            <div class="flowchart">
+<pre>
+┌─────────────────────────────────────────────────────────────┐
+│                    <span class="label">PROGRAM START</span>                            │
+│                    Main.main(args)                          │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│               <span class="label">PARSE COMMAND LINE ARGUMENTS</span>                  │
+│    depth = 6, verbose = false, aiFirst = false (defaults)   │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│              <span class="label">CREATE GAME CONTROLLER</span>                         │
+│    new GameController(depth, verbose, aiFirst)              │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+         ┌────────────────────────────────────────┐
+         │         <span class="box">WHILE (!state.isGameOver())</span>    │
+         └────────────────────────────────────────┘
+                              │
+              ┌───────────────┴───────────────┐
+              ▼                               │
+┌─────────────────────────┐                   │
+│   <span class="label">DISPLAY BOARD</span>         │                   │
+└─────────────────────────┘                   │
+              │                               │
+              ▼                               │
+┌─────────────────────────┐                   │
+│   <span class="label">ROLL DICE (1-5)</span>       │                   │
+└─────────────────────────┘                   │
+              │                               │
+              ▼                               │
+     ┌────────┴────────┐                      │
+     │  CURRENT PLAYER │                      │
+     └─────────────────┘                      │
+     /                  \                     │
+    ▼                    ▼                    │
+┌────────┐          ┌─────────┐               │
+│ <span class="label">HUMAN</span>  │          │<span class="label">COMPUTER</span> │               │
+└────────┘          └─────────┘               │
+    │                    │                    │
+    ▼                    ▼                    │
+┌────────────┐    ┌─────────────────┐         │
+│Get Legal   │    │Expectiminimax   │         │
+│Moves       │    │.getBestMove()   │         │
+└────────────┘    └─────────────────┘         │
+    │                    │                    │
+    ▼                    ▼                    │
+┌─────────────────────────────────────┐       │
+│          <span class="label">APPLY MOVE</span>                  │       │
+│   GameRules.applyMove(state, move)  │       │
+└─────────────────────────────────────┘       │
+              │                               │
+              ▼                               │
+┌─────────────────────────────────────┐       │
+│        <span class="label">SWITCH PLAYER</span>                 │       │
+└─────────────────────────────────────┘       │
+              │                               │
+              └───────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                      <span class="label">GAME OVER</span>                              │
+│              Display winner: gameOver()                     │
+└─────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h3>Quick Reference</h3>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h4>Run the Game</h4>
+                    <pre data-lang="bash"><code>java -jar SenetGame.jar
+java -jar SenetGame.jar -d 4 -v -a</code></pre>
+                </div>
+                <div class="card">
+                    <h4>Command Line Options</h4>
+                    <div class="table-container">
+                        <table>
+                            <tr><td><code class="inline-code">-d, --depth</code></td><td>AI search depth (1-10)</td></tr>
+                            <tr><td><code class="inline-code">-v, --verbose</code></td><td>Show algorithm details</td></tr>
+                            <tr><td><code class="inline-code">-a, --ai-first</code></td><td>Computer plays first</td></tr>
+                            <tr><td><code class="inline-code">-h, --help</code></td><td>Show help message</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Senet Game Documentation - Intelligent Search Algorithms Project 2025-2026</p>
+        <p style="margin-top: 10px; font-size: 0.9rem;">مشروع خوارزميات البحث الذكية</p>
+    </footer>
+
+    <script>
+        function toggleCollapsible(button) {
+            button.classList.toggle('active');
+            const content = button.nextElementSibling;
+            content.classList.toggle('show');
+        }
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('.nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Animate elements on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.card, .collapsible').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

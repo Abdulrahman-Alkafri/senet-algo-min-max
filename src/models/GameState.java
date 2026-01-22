@@ -41,11 +41,10 @@ public class GameState {
     }
 
     public void incrementPiecesExited(Player player) {
-        if (player == Player.WHITE) {
+        if (player == Player.WHITE)
             whitePiecesExited++;
-        } else {
+         else 
             blackPiecesExited++;
-        }
     }
 
     public void switchPlayer() {

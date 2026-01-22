@@ -164,14 +164,12 @@ public class GameRules {
      * Find rebirth position (square 15 or first empty before it)
      */
     private static int findRebirthPosition(Board board) {
-        if (board.isEmpty(15)) {
+        if (board.isEmpty(15))
             return 15;
-        }
         // Find first empty square before 15
         for (int i = 14; i >= 1; i--) {
-            if (board.isEmpty(i)) {
+            if (board.isEmpty(i))
                 return i;
-            }
         }
         return 1; // Fallback (shouldn't happen in normal game)
     }

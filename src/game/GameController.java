@@ -46,11 +46,10 @@ public class GameController {
             int roll = throwResult.getValue();
             System.out.println("\n" + throwResult);
 
-            if (state.getCurrentPlayer() == humanPlayer) {
+            if (state.getCurrentPlayer() == humanPlayer)
                 humanTurn(roll);
-            } else {
+            else
                 computerTurn(roll);
-            }
         }
 
         // Game over
@@ -118,9 +117,8 @@ public class GameController {
             state.switchPlayer();
 
             // Check if game is over after switching player
-            if (state.isGameOver()) {
+            if (state.isGameOver())
                 return; // Exit immediately if game is over
-            }
 
             pause();
             return;
@@ -135,9 +133,8 @@ public class GameController {
         state = GameRules.applyMove(state, bestMove);
 
         // Check if game is over after the move
-        if (state.isGameOver()) {
+        if (state.isGameOver())
             return; // Exit immediately without switching player
-        }
 
         state.switchPlayer();
 
