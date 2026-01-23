@@ -5,18 +5,12 @@ import game.GameRules;
 
 public class Heuristic {
 
-    // Weights for evaluation (simplified: 0.5 to 50 range)
-    private static final double PIECE_EXITED_WEIGHT = 50.0;
-    private static final double PIECE_ADVANCEMENT_WEIGHT = 5.0;
-    private static final double PIECE_SAFETY_WEIGHT = 2.0;
-    private static final double SPECIAL_SQUARE_WEIGHT = 10.0;
+    private static final double PIECE_EXITED_WEIGHT = 50;
+    private static final double PIECE_ADVANCEMENT_WEIGHT = 5;
+    private static final double PIECE_SAFETY_WEIGHT = 2;
+    private static final double SPECIAL_SQUARE_WEIGHT = 10;
 
-    /**
-     * Evaluate game state from Computer player's perspective
-     * Higher value = better for Computer
-     */
     public static double evaluate(GameState state, Player computerPlayer) {
-        // Terminal state check
         if (GameRules.isTerminalState(state)) {
             if (state.getWinner() == computerPlayer) {
                 return Double.POSITIVE_INFINITY;
@@ -25,20 +19,16 @@ public class Heuristic {
             }
         }
 
-        double score = 0.0;
+        double score = 0;
 
-        // 1. Pieces exited (most important)
         score += (state.getPiecesExited(computerPlayer) -
                   state.getPiecesExited(computerPlayer.opponent()))
                   * PIECE_EXITED_WEIGHT;
 
-        // 2. Piece advancement
         score += calculateAdvancementScore(state, computerPlayer);
 
-        // 3. Piece safety
         score += calculateSafetyScore(state, computerPlayer);
 
-        // 4. Special square control
         score += calculateSpecialSquareScore(state, computerPlayer);
 
         return score;
@@ -75,11 +65,9 @@ public class Heuristic {
 
         double safetyScore = 0;
         for (int pos : positions) {
-            // Pieces in last 5 squares are very safe (can't be swapped easily)
             if (pos >= 26) {
-                safetyScore += 2.0;
+                safetyScore += 2;
             }
-            // Pieces past square 15 are safer
             else if (pos > 15) {
                 safetyScore += 0.5;
             }
@@ -97,16 +85,15 @@ public class Heuristic {
 
         // Avoid water (27)
         if (board.getPieceAt(27) == player) {
-            score -= 5.0; // Penalty for being on water
+            score -= 5; // Penalty for being on water
         }
 
         // Reward for being close to exit (28, 29, 30)
-        if (board.getPieceAt(28) == player) score += 3.0;
-        if (board.getPieceAt(29) == player) score += 4.0;
-        if (board.getPieceAt(30) == player) score += 5.0;
+        if (board.getPieceAt(28) == player) score += 3;
+        if (board.getPieceAt(29) == player) score += 4;
+        if (board.getPieceAt(30) == player) score += 5;
 
-        // Reward for passing happiness (26)
-        if (board.getPieceAt(26) == player) score += 4.0;
+        if (board.getPieceAt(26) == player) score += 4;
 
         return score * SPECIAL_SQUARE_WEIGHT;
     }

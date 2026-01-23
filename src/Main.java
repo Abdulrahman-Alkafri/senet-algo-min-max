@@ -3,12 +3,10 @@ import game.GameController;
 public class Main {
 
     public static void main(String[] args) {
-        // Default values
         int depth = 8;
-        boolean verbose = false;  // Removed verbose flag functionality
+        boolean verbose = false;
         boolean aiFirst = false;
 
-        // Parse command line argumentsi
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "--depth":
@@ -20,7 +18,6 @@ public class Main {
 
                 case "--verbose":
                 case "-v":
-                    // Verbose functionality removed
                     break;
 
                 case "--ai-first":
@@ -35,13 +32,11 @@ public class Main {
             }
         }
 
-        // Validate depth
         if (depth < 1 || depth > 10) {
             System.out.println("Error: Depth must be between 1 and 10");
             return;
         }
 
-        // Start game
         GameController game = new GameController(depth, verbose, aiFirst);
         game.playGame();
     }

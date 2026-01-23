@@ -32,18 +32,13 @@ public class Expectiminimax {
         Move bestMove = null;
         double bestValue = Double.NEGATIVE_INFINITY;
 
-        // Removed verbose output
-
         for (Move move : legalMoves) {
             GameState nextState = GameRules.applyMove(state, move);
             nextState.switchPlayer();
 
-            // Call chance node (opponent will roll dice)
             double value = chanceNode(nextState, maxDepth - 1,
                                      Double.NEGATIVE_INFINITY,
                                      Double.POSITIVE_INFINITY, false);
-
-            // Removed verbose output
 
             if (value > bestValue) {
                 bestValue = value;
@@ -52,8 +47,6 @@ public class Expectiminimax {
         }
 
         stats.endSearch();
-
-        // Removed verbose output
 
         return bestMove;
     }
@@ -66,13 +59,11 @@ public class Expectiminimax {
         stats.incrementNode(TurnType.CHANCE);
         stats.updateMaxDepth(depth);
 
-        // Terminal check
         if (depth == 0 || GameRules.isTerminalState(state)) {
             return Heuristic.evaluate(state, computerPlayer);
         }
 
-        // Calculate expected value over all possible rolls
-        double expectedValue = 0.0;
+        double expectedValue = 0;
         int[] possibleRolls = SticksManager.getAllPossibleRolls();
 
         for (int roll : possibleRolls) {
@@ -91,16 +82,12 @@ public class Expectiminimax {
         return expectedValue;
     }
 
-    /**
-     * MAX node - Computer player's turn (maximize)
-     */
     private double maxNode(GameState state, int depth,
                           double alpha, double beta, int roll) {
         stats.incrementNode(TurnType.MAX);
 
         List<Move> legalMoves = GameRules.getLegalMoves(state, roll);
 
-        // No legal moves - skip turn
         if (legalMoves.isEmpty()) {
             GameState nextState = state.clone();
             nextState.switchPlayer();
@@ -112,7 +99,6 @@ public class Expectiminimax {
         for (Move move : legalMoves) {
             GameState nextState = GameRules.applyMove(state, move);
 
-            // Terminal state check
             if (GameRules.isTerminalState(nextState)) {
                 return Heuristic.evaluate(nextState, computerPlayer);
             }
@@ -123,7 +109,6 @@ public class Expectiminimax {
             maxValue = Math.max(maxValue, value);
             alpha = Math.max(alpha, value);
 
-            // Alpha-beta pruning
             if (beta <= alpha) {
                 break;
             }
@@ -132,16 +117,12 @@ public class Expectiminimax {
         return maxValue;
     }
 
-    /**
-     * MIN node - Opponent's turn (minimize)
-     */
     private double minNode(GameState state, int depth,
                           double alpha, double beta, int roll) {
         stats.incrementNode(TurnType.MIN);
 
         List<Move> legalMoves = GameRules.getLegalMoves(state, roll);
 
-        // No legal moves - skip turn
         if (legalMoves.isEmpty()) {
             GameState nextState = state.clone();
             nextState.switchPlayer();
@@ -153,7 +134,6 @@ public class Expectiminimax {
         for (Move move : legalMoves) {
             GameState nextState = GameRules.applyMove(state, move);
 
-            // Terminal state check
             if (GameRules.isTerminalState(nextState)) {
                 return Heuristic.evaluate(nextState, computerPlayer);
             }
@@ -164,7 +144,6 @@ public class Expectiminimax {
             minValue = Math.min(minValue, value);
             beta = Math.min(beta, value);
 
-            // Alpha-beta pruning
             if (beta <= alpha) {
                 break;
             }

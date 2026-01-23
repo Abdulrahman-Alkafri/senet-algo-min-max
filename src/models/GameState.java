@@ -27,7 +27,6 @@ public class GameState {
         this.winner = other.winner;
     }
 
-    // Getters and setters
     public Board getBoard() {
         return board;
     }

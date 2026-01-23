@@ -9,18 +9,6 @@ public class SticksManager {
     private static final Map<Integer, Double> PROBABILITIES = new HashMap<>();
 
     static {
-        // Mathematical calculation:
-        // 4 sticks, each: light (0) or dark (1)
-        // Total combinations: 2^4 = 16
-        //
-        // Roll value | Dark sticks | Combinations | Probability
-        // -----------|-------------|--------------|------------
-        //     1      |      1      |      4       |   4/16 = 0.25
-        //     2      |      2      |      6       |   6/16 = 0.375
-        //     3      |      3      |      4       |   4/16 = 0.25
-        //     4      |      4      |      1       |   1/16 = 0.0625
-        //     5      |      0      |      1       |   1/16 = 0.0625
-
         PROBABILITIES.put(1, 0.25);
         PROBABILITIES.put(2, 0.375);
         PROBABILITIES.put(3, 0.25);
@@ -34,7 +22,7 @@ public class SticksManager {
      * @return Probability of this roll
      */
     public static double getProbability(int roll) {
-        return PROBABILITIES.getOrDefault(roll, 0.0);
+        return PROBABILITIES.getOrDefault(roll, 0.0); // This needs to stay as 0.0 for type compatibility
     }
 
     /**
@@ -52,14 +40,12 @@ public class SticksManager {
     public static int throwSticks() {
         int darkCount = 0;
 
-        // Simulate 4 sticks
         for (int i = 0; i < 4; i++) {
-            if (random.nextBoolean()) { // true = dark, false = light
+            if (random.nextBoolean()) {
                 darkCount++;
             }
         }
 
-        // Convert: 0 dark sticks → roll 5, otherwise roll = darkCount
         return darkCount == 0 ? 5 : darkCount;
     }
 

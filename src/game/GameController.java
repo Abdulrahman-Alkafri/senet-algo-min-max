@@ -17,7 +17,6 @@ public class GameController {
     public GameController(int searchDepth, boolean verbose, boolean aiFirst) {
         this.state = new GameState();
         this.searchDepth = searchDepth;
-        // verbose parameter is ignored - functionality removed
         this.scanner = new Scanner(System.in);
 
         if (aiFirst) {
@@ -40,7 +39,6 @@ public class GameController {
         while (!state.isGameOver()) {
             BoardDisplay.printBoard(state);
 
-            // Throw sticks
             SticksManager.ThrowResult throwResult = SticksManager.throwSticksWithDisplay();
             int roll = throwResult.getValue();
             System.out.println("\n" + throwResult);
@@ -51,7 +49,6 @@ public class GameController {
                 computerTurn(roll);
         }
 
-        // Game over
         gameOver();
     }
 
@@ -62,9 +59,8 @@ public class GameController {
             System.out.println("\n>>> No legal moves available. Turn skipped.");
             state.switchPlayer();
 
-            // Check if game is over after switching player
             if (state.isGameOver()) {
-                return; // Exit immediately if game is over
+                return;
             }
 
             pause();
@@ -97,9 +93,8 @@ public class GameController {
 
         state = GameRules.applyMove(state, selectedMove);
 
-        // Check if game is over after the move
         if (state.isGameOver()) {
-            return; // Exit immediately without switching player
+            return;
         }
 
         state.switchPlayer();
@@ -115,9 +110,8 @@ public class GameController {
             System.out.println("\n>>> Computer has no legal moves. Turn skipped.");
             state.switchPlayer();
 
-            // Check if game is over after switching player
             if (state.isGameOver())
-                return; // Exit immediately if game is over
+                return;
 
             pause();
             return;
@@ -125,13 +119,10 @@ public class GameController {
 
         BoardDisplay.printMove(bestMove, roll);
 
-        // Removed verbose statistics output
-
         state = GameRules.applyMove(state, bestMove);
 
-        // Check if game is over after the move
         if (state.isGameOver())
-            return; // Exit immediately without switching player
+            return;
 
         state.switchPlayer();
 
@@ -154,7 +145,6 @@ public class GameController {
         try {
             scanner.nextLine();
         } catch (Exception e) {
-            // Handle exception
         }
     }
 }

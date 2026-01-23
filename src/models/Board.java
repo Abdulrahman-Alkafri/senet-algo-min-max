@@ -5,21 +5,18 @@ public class Board {
     private Player[] squares;
 
     public Board() {
-        squares = new Player[BOARD_SIZE + 1]; // index 0 unused, 1-30 used
+        squares = new Player[BOARD_SIZE + 1];
         initializeBoard();
     }
 
-    // Copy constructor for cloning
     public Board(Board other) {
         this.squares = other.squares.clone();
     }
 
     private void initializeBoard() {
-        // Initial setup: alternating pieces on first 14 squares
         for (int i = 1; i <= 14; i++) {
             squares[i] = (i % 2 == 1) ? Player.WHITE : Player.BLACK;
         }
-        // Squares 15-30 are empty initially
         for (int i = 15; i <= BOARD_SIZE; i++) {
             squares[i] = null;
         }
@@ -45,7 +42,7 @@ public class Board {
     }
 
     public int[] getPiecePositions(Player player) {
-        int[] positions = new int[7]; // max 7 pieces per player
+        int[] positions = new int[7];
         int count = 0;
         for (int i = 1; i <= BOARD_SIZE && count < 7; i++) {
             if (squares[i] == player) {
