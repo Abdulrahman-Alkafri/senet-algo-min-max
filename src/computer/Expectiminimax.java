@@ -11,12 +11,10 @@ public class Expectiminimax {
 
     private final Player computerPlayer;
     private final GameStats stats;
-    private final boolean verbose;
 
-    public Expectiminimax(Player computerPlayer, boolean verbose) {
+    public Expectiminimax(Player computerPlayer) {
         this.computerPlayer = computerPlayer;
         this.stats = new GameStats();
-        this.verbose = verbose;
     }
 
     /**
@@ -34,10 +32,7 @@ public class Expectiminimax {
         Move bestMove = null;
         double bestValue = Double.NEGATIVE_INFINITY;
 
-        if (verbose) {
-            System.out.println("\n=== Expectiminimax Search ===");
-            System.out.println("Evaluating " + legalMoves.size() + " moves...");
-        }
+        // Removed verbose output
 
         for (Move move : legalMoves) {
             GameState nextState = GameRules.applyMove(state, move);
@@ -48,9 +43,7 @@ public class Expectiminimax {
                                      Double.NEGATIVE_INFINITY,
                                      Double.POSITIVE_INFINITY, false);
 
-            if (verbose) {
-                System.out.printf("  Move: %s → Value: %.3f\n", move, value);
-            }
+            // Removed verbose output
 
             if (value > bestValue) {
                 bestValue = value;
@@ -60,11 +53,7 @@ public class Expectiminimax {
 
         stats.endSearch();
 
-        if (verbose) {
-            System.out.printf("\nBest move selected: %s (value: %.3f)\n",
-                             bestMove, bestValue);
-            stats.printStats();
-        }
+        // Removed verbose output
 
         return bestMove;
     }

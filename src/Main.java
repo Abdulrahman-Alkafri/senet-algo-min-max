@@ -4,8 +4,8 @@ public class Main {
 
     public static void main(String[] args) {
         // Default values
-        int depth = 6;
-        boolean verbose = false;
+        int depth = 8;
+        boolean verbose = false;  // Removed verbose flag functionality
         boolean aiFirst = false;
 
         // Parse command line argumentsi
@@ -20,7 +20,7 @@ public class Main {
 
                 case "--verbose":
                 case "-v":
-                    verbose = true;
+                    // Verbose functionality removed
                     break;
 
                 case "--ai-first":
@@ -53,12 +53,11 @@ public class Main {
         System.out.println("\nUsage: java Main [options]");
         System.out.println("\nOptions:");
         System.out.println("  -d, --depth <n>      Set search depth (default: 3)");
-        System.out.println("  -v, --verbose        Show detailed algorithm output");
         System.out.println("  -a, --ai-first       Computer plays first (default: human first)");
         System.out.println("  -h, --help           Show this help message");
         System.out.println("\nExamples:");
-        System.out.println("  java Main --depth 4 --verbose");
-        System.out.println("  java Main -d 5 -v -a");
+        System.out.println("  java Main --depth 4");
+        System.out.println("  java Main -d 5 -a");
         System.out.println("\n" +
             "╔════════════════════════════════════════════════════════╗\n" +
             "║  Special Squares:                                      ║\n" +

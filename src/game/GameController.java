@@ -10,7 +10,6 @@ import java.util.Scanner;
 public class GameController {
     private GameState state;
     private final int searchDepth;
-    private final boolean verbose;
     private final Player humanPlayer;
     private final Player computerPlayer;
     private final Scanner scanner;
@@ -18,7 +17,7 @@ public class GameController {
     public GameController(int searchDepth, boolean verbose, boolean aiFirst) {
         this.state = new GameState();
         this.searchDepth = searchDepth;
-        this.verbose = verbose;
+        // verbose parameter is ignored - functionality removed
         this.scanner = new Scanner(System.in);
 
         if (aiFirst) {
@@ -109,7 +108,7 @@ public class GameController {
     private void computerTurn(int roll) {
         System.out.println("\n>>> Computer is thinking...");
 
-        Expectiminimax computer = new Expectiminimax(computerPlayer, verbose);
+        Expectiminimax computer = new Expectiminimax(computerPlayer);
         Move bestMove = computer.getBestMove(state, roll, searchDepth);
 
         if (bestMove == null) {
@@ -126,9 +125,7 @@ public class GameController {
 
         BoardDisplay.printMove(bestMove, roll);
 
-        if (verbose) {
-            computer.getStats().printStats();
-        }
+        // Removed verbose statistics output
 
         state = GameRules.applyMove(state, bestMove);
 
