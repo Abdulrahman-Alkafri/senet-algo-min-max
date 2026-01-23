@@ -17,7 +17,6 @@ public class GameState {
         this.winner = null;
     }
 
-    // Copy constructor
     public GameState(GameState other) {
         this.board = other.board.clone();
         this.currentPlayer = other.currentPlayer;

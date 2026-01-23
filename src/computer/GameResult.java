@@ -5,12 +5,10 @@ import models.Move;
 public class GameResult {
     private final double value;
     private final Move bestMove;
-    private final TurnType nodeType;
 
-    public GameResult(double value, Move bestMove, TurnType nodeType) {
+    public GameResult(double value, Move bestMove) {
         this.value = value;
         this.bestMove = bestMove;
-        this.nodeType = nodeType;
     }
 
     public double getValue() {
@@ -21,13 +19,9 @@ public class GameResult {
         return bestMove;
     }
 
-    public TurnType getNodeType() {
-        return nodeType;
-    }
-
     @Override
     public String toString() {
-        return String.format("GameResult[value=%.3f, move=%s, type=%s]",
-            value, bestMove, nodeType);
+        return String.format("GameResult[value=%.3f, move=%s]",
+            value, bestMove);
     }
 }

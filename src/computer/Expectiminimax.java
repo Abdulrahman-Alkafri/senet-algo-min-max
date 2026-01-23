@@ -10,19 +10,12 @@ import java.util.List;
 public class Expectiminimax {
 
     private final Player computerPlayer;
-    private final GameStats stats;
 
     public Expectiminimax(Player computerPlayer) {
         this.computerPlayer = computerPlayer;
-        this.stats = new GameStats();
     }
 
-    /**
-     * Find best move for given state and roll
-     */
     public Move getBestMove(GameState state, int roll, int maxDepth) {
-        stats.reset();
-
         List<Move> legalMoves = GameRules.getLegalMoves(state, roll);
 
         if (legalMoves.isEmpty()) return null;
@@ -46,19 +39,11 @@ public class Expectiminimax {
             }
         }
 
-        stats.endSearch();
-
         return bestMove;
     }
 
-    /**
-     * CHANCE node - calculate expected value over all dice rolls
-     */
     private double chanceNode(GameState state, int depth,
                              double alpha, double beta, boolean isMaxPlayer) {
-        stats.incrementNode(TurnType.CHANCE);
-        stats.updateMaxDepth(depth);
-
         if (depth == 0 || GameRules.isTerminalState(state)) {
             return Heuristic.evaluate(state, computerPlayer);
         }
@@ -84,8 +69,6 @@ public class Expectiminimax {
 
     private double maxNode(GameState state, int depth,
                           double alpha, double beta, int roll) {
-        stats.incrementNode(TurnType.MAX);
-
         List<Move> legalMoves = GameRules.getLegalMoves(state, roll);
 
         if (legalMoves.isEmpty()) {
@@ -119,8 +102,6 @@ public class Expectiminimax {
 
     private double minNode(GameState state, int depth,
                           double alpha, double beta, int roll) {
-        stats.incrementNode(TurnType.MIN);
-
         List<Move> legalMoves = GameRules.getLegalMoves(state, roll);
 
         if (legalMoves.isEmpty()) {
@@ -152,7 +133,4 @@ public class Expectiminimax {
         return minValue;
     }
 
-    public GameStats getStats() {
-        return stats;
-    }
 }

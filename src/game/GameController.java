@@ -84,7 +84,7 @@ public class GameController {
                 }
             } else {
                 System.out.println("Invalid input, please re-enter a number from the upper list of moves");
-                scanner.next(); // Clear the invalid input
+                scanner.next();
             }
         }
 

@@ -9,9 +9,6 @@ import java.util.List;
 
 public class BoardDisplay {
 
-    /**
-     * Print the board in S-pattern
-     */
     public static void printBoard(GameState state) {
         Board board = state.getBoard();
 
@@ -19,22 +16,18 @@ public class BoardDisplay {
         System.out.println("║                    SENET GAME BOARD                        ║");
         System.out.println("╠════════════════════════════════════════════════════════════╣");
 
-        // Row 1: Squares 1-10
         printRow(board, 1, 10, false);
 
         System.out.println("╟────────────────────────────────────────────────────────────╢");
 
-        // Row 2: Squares 11-20 (reversed)
         printRow(board, 20, 11, true);
 
         System.out.println("╟────────────────────────────────────────────────────────────╢");
 
-        // Row 3: Squares 21-30
         printRow(board, 21, 30, false);
 
         System.out.println("╚════════════════════════════════════════════════════════════╝");
 
-        // Game info
         printGameInfo(state);
     }
 
@@ -85,17 +78,11 @@ public class BoardDisplay {
         System.out.println("└─────────────────────────────────────────────────────────┘");
     }
 
-    /**
-     * Print move details
-     */
     public static void printMove(Move move, int roll) {
         System.out.println("\n>>> " + move);
         System.out.println("    Roll was: " + roll);
     }
 
-    /**
-     * Print legal moves
-     */
     public static void printLegalMoves(List<Move> moves) {
         System.out.println("\n--- Legal Moves ---");
         for (int i = 0; i < moves.size(); i++) {

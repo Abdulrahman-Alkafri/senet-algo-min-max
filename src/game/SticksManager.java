@@ -16,27 +16,14 @@ public class SticksManager {
         PROBABILITIES.put(5, 0.0625);
     }
 
-    /**
-     * Calculate probability for a specific roll value
-     * @param roll Roll value (1-5)
-     * @return Probability of this roll
-     */
     public static double getProbability(int roll) {
-        return PROBABILITIES.getOrDefault(roll, 0.0); // This needs to stay as 0.0 for type compatibility
+        return PROBABILITIES.getOrDefault(roll, 0.0);
     }
 
-    /**
-     * Get all possible roll values
-     * @return Array of possible rolls [1, 2, 3, 4, 5]
-     */
     public static int[] getAllPossibleRolls() {
         return new int[]{1, 2, 3, 4, 5};
     }
 
-    /**
-     * Simulate throwing 4 sticks
-     * @return Roll value (1-5)
-     */
     public static int throwSticks() {
         int darkCount = 0;
 
@@ -49,10 +36,6 @@ public class SticksManager {
         return darkCount == 0 ? 5 : darkCount;
     }
 
-    /**
-     * Throw sticks with visualization
-     * @return Roll value and stick representation
-     */
     public static ThrowResult throwSticksWithDisplay() {
         boolean[] sticks = new boolean[4];
         int darkCount = 0;
@@ -66,17 +49,13 @@ public class SticksManager {
         return new ThrowResult(rollValue, sticks);
     }
 
-    /**
-     * Get probability distribution as a map
-     */
     public static Map<Integer, Double> getProbabilityDistribution() {
         return new HashMap<>(PROBABILITIES);
     }
 
-    // Inner class for detailed throw result
     public static class ThrowResult {
         private final int value;
-        private final boolean[] sticks; // true = dark, false = light
+        private final boolean[] sticks;
 
         public ThrowResult(int value, boolean[] sticks) {
             this.value = value;

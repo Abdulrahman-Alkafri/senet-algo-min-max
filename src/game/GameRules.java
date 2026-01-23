@@ -6,9 +6,6 @@ import java.util.List;
 
 public class GameRules {
 
-    /**
-     * Get all legal moves for current player given a roll
-     */
     public static List<Move> getLegalMoves(GameState state, int roll) {
         List<Move> legalMoves = new ArrayList<>();
         Player currentPlayer = state.getCurrentPlayer();
@@ -52,9 +49,6 @@ public class GameRules {
         return legalMoves;
     }
 
-    /**
-     * Check special square exit conditions (squares 26, 28, 29, 30)
-     */
     private static Move checkSpecialSquareExit(GameState state, int position, int roll) {
         Player player = state.getCurrentPlayer();
 
@@ -72,14 +66,18 @@ public class GameRules {
                 if (roll == 3) {
                     return new Move(position, 31, player, false, true);
                 } else {
-                    return new Move(position, 15, player, false, false);
+                    Board board = state.getBoard();
+                    int rebirthPos = findRebirthPosition(board);
+                    return new Move(position, rebirthPos, player, false, false);
                 }
 
             case 29:
                 if (roll == 2) {
                     return new Move(position, 31, player, false, true);
                 } else {
-                    return new Move(position, 15, player, false, false);
+                    Board board = state.getBoard();
+                    int rebirthPos = findRebirthPosition(board);
+                    return new Move(position, rebirthPos, player, false, false);
                 }
 
             case 30:
@@ -89,9 +87,6 @@ public class GameRules {
         return null;
     }
 
-    /**
-     * Apply a move to the game state (returns new state)
-     */
     public static GameState applyMove(GameState state, Move move) {
         GameState newState = state.clone();
         Board board = newState.getBoard();
@@ -121,9 +116,6 @@ public class GameRules {
         return newState;
     }
 
-    /**
-     * Apply effects of special squares
-     */
     private static void applySpecialSquareEffects(GameState state, int position, Player player) {
         Board board = state.getBoard();
 
@@ -136,9 +128,6 @@ public class GameRules {
         }
     }
 
-    /**
-     * Find rebirth position (square 15 or first empty before it)
-     */
     private static int findRebirthPosition(Board board) {
         if (board.isEmpty(15))
             return 15;
@@ -149,16 +138,10 @@ public class GameRules {
         return 1;
     }
 
-    /**
-     * Check if state is terminal
-     */
     public static boolean isTerminalState(GameState state) {
         return state.isGameOver();
     }
 
-    /**
-     * Check if a player can make any move with given roll
-     */
     public static boolean hasLegalMoves(GameState state, int roll) {
         return !getLegalMoves(state, roll).isEmpty();
     }

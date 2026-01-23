@@ -15,7 +15,6 @@ public class Move {
         this.isExit = isExit;
     }
 
-    // Getters
     public int getFromPosition() {
         return fromPosition;
     }
