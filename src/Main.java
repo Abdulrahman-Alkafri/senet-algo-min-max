@@ -4,7 +4,6 @@ public class Main {
 
     public static void main(String[] args) {
         int depth = 8;
-        boolean verbose = false;
         boolean aiFirst = false;
 
         for (int i = 0; i < args.length; i++) {
@@ -15,11 +14,6 @@ public class Main {
                         depth = Integer.parseInt(args[++i]);
                     }
                     break;
-
-                case "--verbose":
-                case "-v":
-                    break;
-
                 case "--ai-first":
                 case "-a":
                     aiFirst = true;
@@ -37,7 +31,7 @@ public class Main {
             return;
         }
 
-        GameController game = new GameController(depth, verbose, aiFirst);
+        GameController game = new GameController(depth, aiFirst);
         game.playGame();
     }
 

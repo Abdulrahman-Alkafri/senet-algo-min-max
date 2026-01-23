@@ -14,7 +14,7 @@ public class GameController {
     private final Player computerPlayer;
     private final Scanner scanner;
 
-    public GameController(int searchDepth, boolean verbose, boolean aiFirst) {
+    public GameController(int searchDepth, boolean aiFirst) {
         this.state = new GameState();
         this.searchDepth = searchDepth;
         this.scanner = new Scanner(System.in);
